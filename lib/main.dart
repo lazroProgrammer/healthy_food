@@ -7,6 +7,7 @@ import 'package:healthy_food/src/UI/pages/home_page.dart';
 import 'package:healthy_food/src/UI/theme/light_theme.dart';
 import 'package:healthy_food/src/data%20classes/settings.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:openfoodfacts/openfoodfacts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 //TODO: caching json results for some time (json needs shrinking and careful treatement)
@@ -22,12 +23,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // TODO: a product tracking feature that you can use to track the products you buy
 //  you buy , after that you need to optomize the statistics system for this
-
 //TODO:possibly link the two apps (money management and product management apps)
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPreferences.getInstance();
   await SettingsData.init();
+
+  OpenFoodAPIConfiguration.userAgent = UserAgent(
+    name: 'TestApp',
+    version: '1.0.0',
+    system: 'Dart',
+  );
 
   runApp(const ProviderScope(child: MainApp()));
 }
@@ -47,8 +53,8 @@ class MainApp extends ConsumerWidget {
         debugShowCheckedModeBanner: false,
         theme: (dark)
             ? ThemeData.dark().copyWith(
-                appBarTheme: const AppBarTheme(
-                  // backgroundColor: Colors.teal[900],
+                appBarTheme: AppBarTheme(
+                  backgroundColor: Colors.deepOrange[500],
                   foregroundColor: Colors.white,
                 ),
               )

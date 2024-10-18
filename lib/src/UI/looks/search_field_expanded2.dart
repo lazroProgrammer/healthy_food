@@ -1,30 +1,26 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:healthy_food/src/Notifiers/product_notifier.dart';
+import 'package:healthy_food/src/Notifiers/product_notifier_v2.dart';
 import 'package:healthy_food/src/Notifiers/settings_notifier.dart';
 import 'package:healthy_food/src/Notifiers/tags_notifier.dart';
 import 'package:healthy_food/src/UI/looks/selected_categories.dart';
 import 'package:healthy_food/src/UI/looks/tags_selector_button.dart';
 import 'package:healthy_food/src/data%20classes/product.dart';
 import 'package:healthy_food/src/logic%20based/code_reader.dart';
-import 'package:healthy_food/src/logic%20based/connectivity.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 //TODO: add animation transition for the search/cancel button if logical
 //TODO: add timeout thing here or in the product class
 //TODO: adjust the exception toast here or in product class (not sure about the location)
 
-class SearchFieldExpanded extends ConsumerStatefulWidget {
-  const SearchFieldExpanded({this.color, super.key});
+class SearchFieldExpanded2 extends ConsumerStatefulWidget {
+  const SearchFieldExpanded2({this.color, super.key});
   final Color? color;
   @override
-  ConsumerState<SearchFieldExpanded> createState() => _MyWidgetState();
+  ConsumerState<SearchFieldExpanded2> createState() => _MyWidgetState();
 }
 
-class _MyWidgetState extends ConsumerState<SearchFieldExpanded> {
+class _MyWidgetState extends ConsumerState<SearchFieldExpanded2> {
   static const int WAIT_DURATION = 1;
   final formKey = GlobalKey<FormState>();
   bool disabledB = false;
@@ -36,6 +32,7 @@ class _MyWidgetState extends ConsumerState<SearchFieldExpanded> {
   @override
   Widget build(BuildContext context) {
     final dark = ref.watch(darkmodeNotifier);
+    final categories = ref.watch(tagNotifierProvider);
     return GestureDetector(
       onTap: () {
         _focusNode1.unfocus();
@@ -113,6 +110,7 @@ class _MyWidgetState extends ConsumerState<SearchFieldExpanded> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: !cancelB
+                          // ? search button
                           ? ElevatedButton(
                               style: ButtonStyle(
                                   backgroundColor: WidgetStatePropertyAll(dark
@@ -120,58 +118,17 @@ class _MyWidgetState extends ConsumerState<SearchFieldExpanded> {
                                       : Colors.green[200])),
                               onPressed: (disabledB)
                                   ? null
-                                  : () {
-                                      final tags =
-                                          ref.watch(tagNotifierProvider);
-                                      final isValidated =
-                                          formKey.currentState!.validate();
-                                      if (isValidated) {
-                                        try {
-                                          Connection.internetConnection()
-                                              .then((isConnected) async {
-                                            if (isConnected) {
-                                              setState(() {
-                                                disabledB = !disabledB;
-                                              });
-
-                                              Future.delayed(const Duration(
-                                                      seconds: WAIT_DURATION))
-                                                  .then(
-                                                (_) {
-                                                  setState(() {
-                                                    cancelB = !cancelB;
-                                                    disabledB = !disabledB;
-                                                  });
-                                                },
-                                              );
-
-                                              cancelB = await ref
-                                                  .read(productsListNotifier
-                                                      .notifier)
-                                                  .search(
-                                                      categories: tags,
-                                                      limit: int.parse(
-                                                          numberTEC.text),
-                                                      searchTerm:
-                                                          searchTEC.text);
-
-                                              setState(() {});
-                                            } else {
-                                              Fluttertoast.showToast(
-                                                  msg: AppLocalizations.of(
-                                                          context)!
-                                                      .check_your_internet_connection);
-                                            }
-                                          });
-                                        } on SocketException catch (_) {
-                                          Fluttertoast.showToast(
-                                              msg: AppLocalizations.of(context)!
-                                                  .address_not_found_EXT);
-                                        }
-                                      }
+                                  : () async {
+                                      await ref
+                                          .read(productsListNotifier2.notifier)
+                                          .search(
+                                              limit: 5,
+                                              searchTerm: searchTEC.text,
+                                              categories: categories);
                                     },
                               child: Text(AppLocalizations.of(context)!.search),
                             )
+                          //? cancel button
                           : ElevatedButton(
                               style: ButtonStyle(
                                   backgroundColor: WidgetStatePropertyAll((dark)

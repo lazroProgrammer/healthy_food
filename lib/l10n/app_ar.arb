@@ -4,6 +4,11 @@
     ,"results":"النتائج"
     ,"home":"الواجهة الرئيسية"
     ,"profile":"الحساب"
+    ,"app_tutorial":"app_tutorial"
+    ,"about_us":"تعرف علينا"
+    ,"rate_us":"قيم التطتبيق"
+
+
     ,"logout":"تسجيل الخروج"
     ,"product_name": "اسم المنتج"
     ,"number":"العدد"
@@ -23,6 +28,7 @@
         ,"app_ui": "واجهة التطبيق"
             ,"simple": "بسيطة"
             ,"complex": "معقدة"
+    ,"terms_of_use": "terms of use"
     ,"bug_report": "الإعلام عن خلل تقني"
     ,"donate": "التبرع"
 
@@ -44,11 +50,13 @@
     ,"cooking_helpers":"cooking helpers"
     ,"beverages":"beverages"
     ,"beverage_preparations":"beverage preparations"
+    ,"fermented_foods":"fermented foods"
     ,"pasteurised_products":"pasteurised products"
     ,"unpasteurised_products":"unpasteurised products"
 
     ,"nutrient": "المغذيات"
     ,"value": "القيمة"
+    ,"value_100": "القيمة لكل 100غ"
     ,"unit": "الوحدة"
     ,"carbohydrates": "كاربوهيدرات"
     ,"energy":"طاقة"

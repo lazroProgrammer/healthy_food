@@ -76,13 +76,24 @@ class SettingsPage extends HookConsumerWidget {
               height: 10,
             ),
             SettingGroup(
-              icon: Icons.person_rounded,
-              label: AppLocalizations.of(context)!.profile,
+              icon: Icons.computer_rounded,
+              label: "technical",
             ),
             Divider(),
             ListTile(
+              leading: const Icon(Icons.info),
+              // title: Text(AppLocalizations.of(context)!.solve_common_issues),
+              title: Text("solve common issues"),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.bug_report),
+              title: Text(AppLocalizations.of(context)!.bug_report),
+              onTap: () {},
+            ),
+            ListTile(
               leading: const Icon(Icons.text_snippet),
-              title: Text(AppLocalizations.of(context)!.about),
+              title: Text(AppLocalizations.of(context)!.terms_of_use),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => const MyHomePage(title: "Yes")));

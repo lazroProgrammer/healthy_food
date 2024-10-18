@@ -29,7 +29,6 @@ class Product {
   //! label consistency in different languages
   static const List<String> genericCategories = [
     "en:baby-foods",
-    "en:fried-foods",
     "en:desserts",
     "en:dairies",
     "en:breaded-products",
@@ -315,7 +314,7 @@ class Product {
   static Map<String, String> getCategoriesMap(BuildContext context) {
     return {
       "en:baby-foods": AppLocalizations.of(context)!.baby_foods,
-      "en:fried-foods": AppLocalizations.of(context)!.fried_foods,
+      // "en:fried-foods": AppLocalizations.of(context)!.fried_foods,
       "en:desserts": AppLocalizations.of(context)!.desserts,
       "en:breaded-products": AppLocalizations.of(context)!.breaded_products,
       "en:dairies": AppLocalizations.of(context)!.dairies,
@@ -333,6 +332,7 @@ class Product {
       "en:farming-products": AppLocalizations.of(context)!.farming_products,
       //2"en:fish-and-meat-and-eggs":
       //2  AppLocalizations.of(context)!.fish_and_meat_and_eggs,
+      "en:fermented-foods": AppLocalizations.of(context)!.fermented_foods,
       "en:cooking-helpers": AppLocalizations.of(context)!.cooking_helpers,
       "en:beverages": AppLocalizations.of(context)!.beverages,
       "en:beverage-preparations":

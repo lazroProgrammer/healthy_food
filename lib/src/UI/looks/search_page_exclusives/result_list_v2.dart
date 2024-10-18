@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:healthy_food/src/Notifiers/product_notifier.dart';
+import 'package:healthy_food/src/Notifiers/product_notifier_v2.dart';
 import 'package:healthy_food/src/Notifiers/settings_notifier.dart';
-import 'package:healthy_food/src/UI/looks/food_widgets/legacy/food_row.dart';
-import 'package:healthy_food/src/UI/looks/food_widgets/legacy/product_widget.dart';
+import 'package:healthy_food/src/UI/looks/food_widgets/package_based/food_row2.dart';
+import 'package:healthy_food/src/UI/looks/food_widgets/package_based/product_widget2.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ResultList extends ConsumerWidget {
-  const ResultList({this.color, super.key});
+class ResultListV2 extends ConsumerWidget {
+  const ResultListV2({this.color, super.key});
   final Color? color;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dark = ref.watch(darkmodeNotifier);
-    final products = ref.watch(productsListNotifier);
+    final products = ref.watch(productsListNotifier2);
     return Container(
       margin: const EdgeInsets.fromLTRB(20.0, 0, 20.0, 0),
       padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
@@ -46,10 +46,10 @@ class ResultList extends ConsumerWidget {
                     child: ListView.builder(
                         itemCount: products.length,
                         itemBuilder: (context, index) => InkWell(
-                              child: FoodRow(item: products[index]),
+                              child: FoodRow2(item: products[index]),
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => ProductWidget(
+                                    builder: (context) => ProductHandlerWidget(
                                         product: products[index])));
                               },
                             )),

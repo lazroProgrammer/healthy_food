@@ -4,6 +4,11 @@
     ,"results":"resultats"
     ,"home":"page d'acceuils"
     ,"profile":"profile"
+    ,"app_tutorial":"tutorial d'application"
+    ,"about_us":"About Us"
+    ,"rate_us":"Rate Us"
+
+
     ,"logout":"logout"
 
     ,"product_name": "nom de produit"
@@ -24,6 +29,7 @@
         ,"app_ui": "interface d'application"
             ,"simple": "simple"
             ,"complex": "complex"
+    ,"terms_of_use": "condition d'application"
     ,"bug_report": "Reporter un bug"
     ,"donate": "Donate"
 
@@ -45,11 +51,13 @@
     ,"cooking_helpers":"cooking helpers"
     ,"beverages":"boissons"
     ,"beverage_preparations":"preparations boisson"
+    ,"fermented_foods":"fermented foods"
     ,"pasteurised_products":"products pasteurisé"
     ,"unpasteurised_products":"unpasteurised products"
 
     ,"nutrient": "Nutrient"
     ,"value": "Valeur"
+    ,"value_100": "valeur pour 100g"
     ,"unit": "Unité"
     ,"carbohydrates": "carbohydrates"
     ,"energy":"energy"

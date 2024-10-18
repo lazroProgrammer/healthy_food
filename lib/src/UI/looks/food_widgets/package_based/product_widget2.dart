@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:healthy_food/src/UI/looks/food_card.dart';
-import 'package:healthy_food/src/UI/looks/nutrient_widget.dart';
-import 'package:healthy_food/src/data%20classes/product.dart';
+import 'package:healthy_food/src/UI/looks/food_widgets/package_based/food_card2.dart';
+import 'package:healthy_food/src/UI/looks/food_widgets/package_based/nutrient_widget2.dart';
+import 'package:healthy_food/src/data%20classes/open_food_pub/product.dart';
 
-class ProductWidget extends StatelessWidget {
-  final Product product;
+class ProductHandlerWidget extends StatelessWidget {
+  final ProductHandler product;
 
-  const ProductWidget({super.key, required this.product});
+  const ProductHandlerWidget({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class ProductWidget extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(AppLocalizations.of(context)!.product_details),
-          backgroundColor: Colors.teal[600],
+          // backgroundColor: ,
         ),
         body: Container(
           padding: const EdgeInsets.all(16.0),
@@ -23,15 +23,15 @@ class ProductWidget extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                FoodCard(item: product),
+                FoodCard2(item: product),
                 const SizedBox(height: 16),
                 Text(
                   AppLocalizations.of(context)!.nutritional_information,
                   style: const TextStyle(
                       fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                NutrientTableWidget(
-                  nutrients: product.nutrients,
+                NutrientTableWidget2(
+                  nutrients: product.nutriments,
                 )
               ],
             ),
