@@ -38,9 +38,11 @@ class _FoodCardState extends State<FoodCard> {
         }
       });
       uno = false;
-      setState(() {
-        paths = paths;
-      });
+      if (mounted) {
+        setState(() {
+          paths = paths;
+        });
+      }
     }
 
     return Container(

@@ -50,9 +50,11 @@ class _TutorialSlidersState extends State<TutorialSliders> {
                   _controller.animateToPage(3,
                       duration: Duration(milliseconds: 1500),
                       curve: Curves.decelerate);
-                  setState(() {
-                    index = 1;
-                  });
+                  if (mounted) {
+                    setState(() {
+                      index = 1;
+                    });
+                  }
                 },
                 child: Text(
                   "Skip",
@@ -63,9 +65,11 @@ class _TutorialSlidersState extends State<TutorialSliders> {
                 onPressed: () {
                   if (index == 0) {
                     if (_controller.page != null && _controller.page! >= 2.0) {
-                      setState(() {
-                        index = 1;
-                      });
+                      if (mounted) {
+                        setState(() {
+                          index = 1;
+                        });
+                      }
                     }
                     _controller.nextPage(
                         duration: Duration(milliseconds: 500),

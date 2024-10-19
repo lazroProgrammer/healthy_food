@@ -16,7 +16,8 @@ class SettingsPage extends HookConsumerWidget {
         useState<String?>(themes[ref.watch(appStyleNotifier)]);
     bool darkmode = ref.watch(darkmodeNotifier);
     bool dataSaver = ref.watch(dataSaverNotifier);
-    // bool dailyreminder = ref.watch(dailyReminderNotifier);
+
+    bool dailyreminder = ref.watch(dailyReminderNotifier);
     // bool deadlinereminder = ref.watch(deadlineReminderNotifier);
     return SafeArea(
       child: Scaffold(
@@ -72,6 +73,62 @@ class SettingsPage extends HookConsumerWidget {
                   // AnimatedIcon(icon: , progress: progress)
                   const Icon(Icons.data_saver_off),
             ),
+            SizedBox(
+              height: 10,
+            ),
+            SettingGroup(
+              icon: Icons.manage_search_rounded,
+              label: "Search preferences",
+            ),
+            Divider(),
+            SwitchListTile(
+              value: dailyreminder,
+              title: const Text("show additional infos"),
+              onChanged: (bool value) {
+                ref
+                    .read(dailyReminderNotifier.notifier)
+                    .toggleDailyReminder(value);
+              },
+              secondary:
+                  // AnimatedIcon(icon: , progress: progress)
+                  const Icon(Icons.data_saver_off),
+            ),
+            // SwitchListTile(
+            //   value: dataSaver,
+            //   title: const Text("show allergents"),
+            //   onChanged: (bool value) {
+            //     ref.read(dataSaverNotifier.notifier).toggleDataSaver(value);
+            //   },
+            //   secondary:
+            //       // AnimatedIcon(icon: , progress: progress)
+            //       const Icon(Icons.data_saver_off),
+            // ),
+            ListTile(
+              title: Text("Preffered Region"),
+              leading: const Icon(Icons.location_searching),
+              trailing: DropdownButton<String>(
+                value: selectedTheme.value,
+                onChanged: (String? newValue) {
+                  if (newValue != null) {
+                    //! intential -1 there
+                    ref
+                        .read(designStyleIndexNotifier.notifier)
+                        .setIndex(themes.indexOf(newValue) - 1);
+                    ref
+                        .read(appStyleNotifier.notifier)
+                        .setAppStyle(themes.indexOf(newValue));
+                  }
+                  selectedTheme.value = newValue;
+                },
+                items: themes.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+            ),
+
             SizedBox(
               height: 10,
             ),

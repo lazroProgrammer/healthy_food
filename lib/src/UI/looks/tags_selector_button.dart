@@ -60,13 +60,15 @@ class __CategorySelectorModalState
   }
 
   void _toggleTag(String category) {
-    setState(() {
-      if (_selectedTags.contains(category)) {
-        _selectedTags.remove(category);
-      } else {
-        _selectedTags.add(category);
-      }
-    });
+    if (mounted) {
+      setState(() {
+        if (_selectedTags.contains(category)) {
+          _selectedTags.remove(category);
+        } else {
+          _selectedTags.add(category);
+        }
+      });
+    }
   }
 
   String getKeyFromValue(Map<String, String> map, String value) {

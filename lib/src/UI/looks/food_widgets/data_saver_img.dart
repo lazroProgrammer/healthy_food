@@ -29,9 +29,11 @@ class _DataSaverImgState extends State<DataSaverImg>
           await DefaultCacheManager().getFileFromCache(widget.imageUrl);
       if (fileInfo != null) {
         // If the image exists in the cache, set isImageCached to true
-        setState(() {
-          isImageCached = true;
-        });
+        if (mounted) {
+          setState(() {
+            isImageCached = true;
+          });
+        }
       }
     } catch (e) {
       Logger().e("Error checking image cache: $e");
@@ -55,9 +57,11 @@ class _DataSaverImgState extends State<DataSaverImg>
             : (!isClicked && !isImageCached)
                 ? InkWell(
                     onTap: () {
-                      setState(() {
-                        isClicked = true;
-                      });
+                      if (mounted) {
+                        setState(() {
+                          isClicked = true;
+                        });
+                      }
                     },
                     child: SizedBox(
                         height: 130,

@@ -138,17 +138,21 @@ class _MyWidgetState extends ConsumerState<SearchFieldExpanded2> {
                                   ? null
                                   : () {
                                       Product.cancelFetching();
-                                      setState(() {
-                                        disabledB = !disabledB;
-                                      });
+                                      if (mounted) {
+                                        setState(() {
+                                          disabledB = !disabledB;
+                                        });
+                                      }
                                       Future.delayed(const Duration(
                                               seconds: WAIT_DURATION))
                                           .then(
                                         (_) {
-                                          setState(() {
-                                            cancelB = !cancelB;
-                                            disabledB = !disabledB;
-                                          });
+                                          if (mounted) {
+                                            setState(() {
+                                              cancelB = !cancelB;
+                                              disabledB = !disabledB;
+                                            });
+                                          }
                                         },
                                       );
                                     },

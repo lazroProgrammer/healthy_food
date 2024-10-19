@@ -40,9 +40,11 @@ class _FoodCardState extends ConsumerState<FoodCard2> {
         }
       });
       uno = false;
-      setState(() {
-        paths = paths;
-      });
+      if (mounted) {
+        setState(() {
+          paths = paths;
+        });
+      }
     }
     final dark = ref.watch(darkmodeNotifier);
     final dataSaver = ref.watch(dataSaverNotifier);
@@ -104,25 +106,41 @@ class _FoodCardState extends ConsumerState<FoodCard2> {
                 //     softWrap: true,
                 //     overflow: TextOverflow.fade,
                 //   ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      widget.item.quantity ?? "",
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+
                 const SizedBox(height: 16),
                 Container(
-                  margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      SizedBox(
-                          height: 60,
-                          child: Image.asset(
-                            widget.item.getNutriScoreIconPath(),
-                          )),
-                      Container(
-                          padding: const EdgeInsets.all(2),
-                          color: Colors.white,
-                          height: 64,
-                          child: Image.asset(widget.item.getNovaIconPath())),
-                    ],
-                  ),
-                )
+                    margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        SizedBox(
+                            height: 60,
+                            child: Image.asset(
+                              widget.item.getEcoScoreBadge(),
+                            )),
+                        SizedBox(
+                            height: 60,
+                            child: Image.asset(
+                              widget.item.getNutriScoreIconPath(),
+                            )),
+                        Container(
+                            padding: const EdgeInsets.all(2),
+                            color: Colors.white,
+                            height: 64,
+                            child: Image.asset(widget.item.getNovaIconPath())),
+                      ],
+                    )),
               ],
             ),
           )

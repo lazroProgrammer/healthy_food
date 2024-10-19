@@ -94,14 +94,18 @@ class _MyWidgetState extends ConsumerState<HomePage> {
                         color: (dark) ? Colors.orange[800] : Colors.white60,
                         child: InkWell(
                           onTap: () {
-                            setState(() {
-                              isClicked[index] = true;
-                            });
+                            if (mounted) {
+                              setState(() {
+                                isClicked[index] = true;
+                              });
+                            }
                             Future.delayed(const Duration(milliseconds: 200),
                                 () {
-                              setState(() {
-                                isClicked[index] = false; // Revert scaling
-                              });
+                              if (mounted) {
+                                setState(() {
+                                  isClicked[index] = false; // Revert scaling
+                                });
+                              }
                             });
                             if (widgets[index] != null) {
                               if (index == SEARCH_CARD_INDEX) {
@@ -118,7 +122,8 @@ class _MyWidgetState extends ConsumerState<HomePage> {
                               }
                             }
                           },
-                          splashColor: Colors.orange[700],
+                          splashColor:
+                              (dark) ? Colors.orange[700] : Colors.orange[300],
                           borderRadius: BorderRadius.circular(12),
                           child: Container(
                             margin: EdgeInsets.fromLTRB(10, 10, 10, 6),

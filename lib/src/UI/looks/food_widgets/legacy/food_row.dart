@@ -39,9 +39,11 @@ class _FoodRowState extends ConsumerState<FoodRow> {
       });
 
       uno = false;
-      setState(() {
-        paths = paths;
-      });
+      if (mounted) {
+        setState(() {
+          paths = paths;
+        });
+      }
       //assert(paths.isNotEmpty);
     }
 

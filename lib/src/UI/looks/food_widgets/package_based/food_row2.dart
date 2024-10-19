@@ -40,9 +40,11 @@ class _FoodRowState extends ConsumerState<FoodRow2> {
       });
 
       uno = false;
-      setState(() {
-        paths = paths;
-      });
+      if (mounted) {
+        setState(() {
+          paths = paths;
+        });
+      }
       //assert(paths.isNotEmpty);
     }
 
@@ -98,7 +100,6 @@ class _FoodRowState extends ConsumerState<FoodRow2> {
               children: [
                 Container(
                     padding: const EdgeInsets.all(2),
-                    color: Colors.white,
                     height: 64,
                     child: Image.asset(widget.item.getEcoScoreBadge())),
                 SizedBox(

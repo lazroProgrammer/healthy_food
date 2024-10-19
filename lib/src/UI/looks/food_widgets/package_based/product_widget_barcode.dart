@@ -24,9 +24,11 @@ class _ProductHandlerWidgetState extends State<ProductHandlerBarcodeWidget> {
       product =
           await ProductHandler.fetchProductDataByCode(widget.barcode.trim());
 
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     });
   }
 

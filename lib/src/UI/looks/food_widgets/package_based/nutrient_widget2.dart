@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:healthy_food/src/Notifiers/settings_notifier.dart';
 import 'package:healthy_food/src/data%20classes/open_food_pub/nutriment.dart';
+import 'package:healthy_food/src/data%20classes/open_food_pub/product.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 //TODO: show green and red values in tables in order to show if the nutrient level is good
-class NutrientTableWidget2 extends StatefulWidget {
+class NutrientTableWidget2 extends ConsumerStatefulWidget {
   final List<NutrimentHandler> nutrients;
 
   const NutrientTableWidget2({super.key, required this.nutrients});
 
   @override
-  State<NutrientTableWidget2> createState() => _NutrientTableWidgetState();
+  ConsumerState<NutrientTableWidget2> createState() =>
+      _NutrientTableWidgetState();
 }
 
-class _NutrientTableWidgetState extends State<NutrientTableWidget2> {
+class _NutrientTableWidgetState extends ConsumerState<NutrientTableWidget2> {
   Map<String, String> names = {};
 
   @override
@@ -27,6 +31,7 @@ class _NutrientTableWidgetState extends State<NutrientTableWidget2> {
 
   @override
   Widget build(BuildContext context) {
+    final dark = ref.watch(darkmodeNotifier);
     names = {
       // "carbohydrates": AppLocalizations.of(context)!.carbohydrates,
       // "energy": AppLocalizations.of(context)!.energy,
@@ -53,11 +58,8 @@ class _NutrientTableWidgetState extends State<NutrientTableWidget2> {
         return DataRow(
             color: WidgetStateProperty.resolveWith<Color?>(
                 (Set<WidgetState> states) {
-              return (nutrient.isGood == null)
-                  ? Colors.grey
-                  : (nutrient.isGood!)
-                      ? Colors.green
-                      : Colors.red;
+              return ProductHandler.getNutrientGradientColor(
+                  nutrient.label, double.parse(nutrient.value), dark);
             }),
             cells: [
               DataCell(Text((names.isEmpty)

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:healthy_food/src/data%20classes/open_food_pub/nutriment.dart';
 import 'package:logger/logger.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
@@ -60,7 +61,7 @@ class ProductHandler {
     }
   }
 
-  static Future<SearchResult> searchProducts({
+  static Future<SearchResult?> searchProducts({
     String? name, // Search by product name
     String? brand, // Search by brand name
     String? store, // Search by store
@@ -75,56 +76,62 @@ class ProductHandler {
     String? trace, // Search by traces (e.g., traces of nuts)
   }) async {
     // Create a search configuration based on the provided consumer-oriented filters
-    ProductSearchQueryConfiguration searchConfig =
-        ProductSearchQueryConfiguration(
-      fields: [
-        ProductField.BARCODE,
-        ProductField.NAME, // Product name
-        ProductField.BRANDS, // Brand information
-        ProductField.IMAGE_FRONT_URL, // Product photo
-        ProductField.INGREDIENTS_TEXT, // Ingredients
-        ProductField.NUTRIMENTS,
-        ProductField.ECOSCORE_GRADE,
-        ProductField.NOVA_GROUP,
-        ProductField.NUTRISCORE,
-        ProductField.QUANTITY,
-        // Nutriments information
-      ],
-      parametersList: [
-        if (name != null) SearchTerms(terms: [name]),
-        for (var i in categories)
-          TagFilter.fromType(
-              tagFilterType: TagFilterType.CATEGORIES,
-              tagName: i), // Search by product name
-        if (brand != null) SearchTerms(terms: [brand]), // Search by brand
-        if (store != null) SearchTerms(terms: [store]), // Search by store
-        if (ingredient != null)
-          SearchTerms(terms: [ingredient]), // Search by ingredient
-        if (nutritionGrade != null)
-          SearchTerms(terms: [nutritionGrade]), // Search by nutrition grade
-        if (additive != null)
-          SearchTerms(terms: [additive]), // Search by additives
-        if (label != null)
-          SearchTerms(terms: [label]), // Search by product labels
-        if (allergen != null)
-          SearchTerms(terms: [allergen]), // Search by allergens
-        if (packaging != null)
-          SearchTerms(terms: [packaging]), // Search by packaging type
-        if (country != null) SearchTerms(terms: [country]), // Search by country
-        if (trace != null)
-          SearchTerms(
-              terms: [trace]), // Search by traces (e.g., traces of nuts)
-      ],
-      version: ProductQueryVersion.v3, // Specify the version of the API
-    );
+    try {
+      ProductSearchQueryConfiguration searchConfig =
+          ProductSearchQueryConfiguration(
+        fields: [
+          ProductField.BARCODE,
+          ProductField.NAME, // Product name
+          ProductField.BRANDS, // Brand information
+          ProductField.IMAGE_FRONT_URL, // Product photo
+          ProductField.INGREDIENTS_TEXT, // Ingredients
+          ProductField.NUTRIMENTS,
+          ProductField.ECOSCORE_GRADE,
+          ProductField.NOVA_GROUP,
+          ProductField.NUTRISCORE,
+          ProductField.QUANTITY,
+          // Nutriments information
+        ],
+        parametersList: [
+          if (name != null) SearchTerms(terms: [name]),
+          for (var i in categories)
+            TagFilter.fromType(
+                tagFilterType: TagFilterType.CATEGORIES,
+                tagName: i), // Search by product name
+          if (brand != null) SearchTerms(terms: [brand]), // Search by brand
+          if (store != null) SearchTerms(terms: [store]), // Search by store
+          if (ingredient != null)
+            SearchTerms(terms: [ingredient]), // Search by ingredient
+          if (nutritionGrade != null)
+            SearchTerms(terms: [nutritionGrade]), // Search by nutrition grade
+          if (additive != null)
+            SearchTerms(terms: [additive]), // Search by additives
+          if (label != null)
+            SearchTerms(terms: [label]), // Search by product labels
+          if (allergen != null)
+            SearchTerms(terms: [allergen]), // Search by allergens
+          if (packaging != null)
+            SearchTerms(terms: [packaging]), // Search by packaging type
+          if (country != null)
+            SearchTerms(terms: [country]), // Search by country
+          if (trace != null)
+            SearchTerms(
+                terms: [trace]), // Search by traces (e.g., traces of nuts)
+        ],
+        version: ProductQueryVersion.v3, // Specify the version of the API
+      );
 
-    // Perform the search request
-    SearchResult result =
-        await OpenFoodAPIClient.searchProducts(null, searchConfig);
-    for (var element in retrieveProducts(result)) {
-      log.i(element);
+      // Perform the search request
+      SearchResult result =
+          await OpenFoodAPIClient.searchProducts(null, searchConfig);
+      for (var element in retrieveProducts(result)) {
+        log.i(element);
+      }
+      return result;
+    } on Exception catch (e) {
+      log.e("Error fetching products: $e");
     }
-    return result;
+    return null;
   }
 
   static List<ProductHandler> retrieveProducts(SearchResult searchResult) {
@@ -172,7 +179,10 @@ class ProductHandler {
   static Future<List<ProductHandler>> search(
       {String? name, required List<String> categories}) async {
     final responce = await searchProducts(name: name, categories: categories);
-    final result = retrieveProducts(responce);
+    List<ProductHandler> result = [];
+    if (responce != null) {
+      result = retrieveProducts(responce);
+    }
     return result;
   }
 
@@ -513,6 +523,227 @@ class ProductHandler {
       case Nutrient.cholesterol:
       default:
         return 0.0; // Default case if unit is not defined
+    }
+  }
+
+// Function to return color based on nutrient amount, handling both energy kcal and kJ
+  static Color getNutrientColor(String nutrientType, double value) {
+    switch (nutrientType.toLowerCase().trim()) {
+      case 'fat':
+        if (value <= 3.0) return Colors.green; // Low fat
+        if (value <= 10.25) return Colors.yellow; // First half of moderate fat
+        if (value <= 17.5) return Colors.orange; // Second half of moderate fat
+        return Colors.red; // High fat
+
+      case 'saturated fat':
+        if (value <= 1.5) return Colors.green; // Low saturated fat
+        if (value <= 3.25)
+          return Colors.yellow; // First half of moderate sat. fat
+        if (value <= 5.0)
+          return Colors.orange; // Second half of moderate sat. fat
+        return Colors.red; // High sat. fat
+
+      case 'sugars':
+      case 'carbohydrates':
+        if (value <= 5.0) return Colors.green; // Low sugar
+        if (value <= 13.75)
+          return Colors.yellow; // First half of moderate sugar
+        if (value <= 22.5)
+          return Colors.orange; // Second half of moderate sugar
+        return Colors.red; // High sugar
+
+      case 'salt':
+        if (value <= 0.3) return Colors.green; // Low salt
+        if (value <= 0.6) return Colors.yellow; // First half of moderate salt
+        if (value <= 0.9) return Colors.orange; // Second half of moderate salt
+        if (value <= 1.5) return Colors.red; // High salt
+        return Colors.red[800]!; // Very high salt
+      case 'proteins':
+        if (value <= 2.5) return Colors.grey;
+        if (value <= 5.0) return Colors.lightGreen;
+        return Colors.green;
+      case 'fiber':
+        if (value < 3.0) return Colors.grey; // Low fiber (undesirable)
+        if (value < 6.0) return Colors.green; // Moderate fiber (good)
+        return Colors.green[800]!; // High fiber (excellent)
+
+      case 'energy kcal':
+        if (value <= 40) return Colors.green; // Low energy (good)
+        if (value <= 120) return Colors.yellow; // First half of moderate energy
+        if (value <= 200)
+          return Colors.orange; // Second half of moderate energy
+        return Colors.red; // High energy (high calorie)
+
+      case 'energy kj':
+        if (value <= 167) return Colors.green; // Low energy (~40 kcal)
+        if (value <= 502)
+          return Colors.yellow; // First half of moderate energy (~120 kcal)
+        if (value <= 836)
+          return Colors.orange; // Second half of moderate energy (~200 kcal)
+        return Colors.red; // High energy (high calorie)
+
+      default:
+        return Colors.grey[400]!; // Default color for unknown nutrient
+    }
+  }
+
+// Function to interpolate between two colors
+  static Color interpolateColor(Color color1, Color color2, double fraction) {
+    return Color.lerp(color1, color2, fraction)!;
+  }
+
+// Gradient-based danger color function for nutrients
+  static Color getDangerGradientColor(String nutrientType, double value) {
+    switch (nutrientType.toLowerCase().trim()) {
+      case 'fat':
+        return getGradientColor(value, 3.0, 17.5, Colors.green, Colors.red);
+
+      case 'saturated fat':
+        return getGradientColor(value, 1.5, 5.0, Colors.green, Colors.red);
+
+      case 'sugars':
+      case 'carbohydrates':
+        return getGradientColor(value, 5.0, 22.5, Colors.green, Colors.red);
+
+      case 'salt':
+        return getGradientColor(value, 0.3, 1.5, Colors.green, Colors.red);
+
+      case 'fiber':
+        // Since fiber is "good" in higher amounts, we reverse the gradient
+        return getGradientColor(
+            value, 0, 12.0, Colors.grey[400]!, Colors.green[900]!);
+      case 'proteins':
+        return getGradientColor(
+            value, 0, 10.0, Colors.grey[400]!, Colors.green[900]!);
+      case 'energy kcal':
+        return getGradientColor(value, 40, 200, Colors.green, Colors.red);
+
+      case 'energy kj':
+        return getGradientColor(value, 167, 836, Colors.green, Colors.red);
+
+      default:
+        return Colors.grey; // Default for unknown nutrients
+    }
+  }
+
+// // Helper function to compute gradient color based on value and thresholds
+//   static Color getGradientColor(double value, double minThreshold,
+//       double maxThreshold, Color startColor, Color endColor) {
+//     if (value <= minThreshold) return startColor; // Safe range (green)
+//     if (value >= maxThreshold) return endColor; // Dangerous range (red)
+
+//     // Interpolate between startColor and endColor
+//     double fraction = (value - minThreshold) / (maxThreshold - minThreshold);
+//     return interpolateColor(startColor, endColor, fraction);
+//   }
+
+  // Function to get a gradient color based on nutrient amount, using getNutrientColor logic
+  static Color? getNutrientGradientColor(
+      String nutrientType, double value, bool dark) {
+    final Color green = (dark) ? Colors.green[700]! : Colors.green;
+    final Color red = (dark) ? Colors.red[700]! : Colors.red;
+    final Color grey = (dark) ? Colors.grey[700]! : Colors.grey;
+    final Color yellow = (dark) ? Colors.yellow[800]! : Colors.yellow[700]!;
+    final Color orange = (dark) ? Colors.orange[700]! : Colors.orange;
+
+    switch (nutrientType.toLowerCase()) {
+      case 'fat':
+        return getGradientColor(value, 3.0, 17.5, green, red, yellow, orange);
+
+      case 'saturated fat':
+        return getGradientColor(value, 1.5, 5.0, green, red, yellow, orange);
+
+      case 'carbohydrates':
+      case 'sugars':
+        return getGradientColor(value, 5.0, 22.5, green, red, yellow, orange);
+
+      case 'salt':
+        return getGradientColor(value, 0.3, 1.5, green, red, yellow, orange);
+
+      case 'fiber':
+        return getGradientColor(
+            value, 3.0, 6.0, grey, green); // Grey to green for fiber
+
+      case 'proteins':
+        return getGradientColor(
+            value, 3.0, 5.0, grey, green); // Grey to green for protein
+
+      case 'energy kcal':
+        return getGradientColor(value, 40, 200, green, red, yellow, orange);
+
+      case 'energy kj':
+        return getGradientColor(value, 167, 836, green, red, yellow, orange);
+
+      default:
+        return (dark)
+            ? Colors.grey[900]!
+            : Colors.grey; // Default for unknown nutrients
+    }
+  }
+
+  // Helper function to compute gradient color based on value and thresholds
+  // static Color getGradientColor(double value, double minThreshold,
+  //     double maxThreshold, Color safeColor, Color dangerColor,
+  //     [Color? middleColor1, Color? middleColor2]) {
+  //   if (value <= minThreshold) return safeColor; // Lower bound: safe color
+  //   if (value >= maxThreshold) return dangerColor; // Upper bound: danger color
+
+  //   // Calculate the fraction between minThreshold and maxThreshold
+  //   double range = maxThreshold - minThreshold;
+  //   double fraction = (value - minThreshold) / range;
+
+  //   // Determine the color based on the defined middle colors
+  //   if (middleColor1 != null && middleColor2 != null) {
+  //     // Middle intervals exist
+  //     if (fraction <= 0.5) {
+  //       // Interpolate between safeColor and middleColor1
+  //       return interpolateColor(safeColor, middleColor1, fraction * 2);
+  //     } else {
+  //       // Interpolate between middleColor1 and middleColor2, then to dangerColor
+  //       return interpolateColor(
+  //               middleColor1, middleColor2, (fraction - 0.5) * 2) ??
+  //           interpolateColor(middleColor2, dangerColor, ((fraction - 0.5) * 2));
+  //     }
+  //   } else {
+  //     // No middle colors; interpolate directly between safeColor and dangerColor
+  //     return interpolateColor(safeColor, dangerColor, fraction);
+  //   }
+  // }
+  static Color getGradientColor(
+    double value,
+    double minThreshold,
+    double maxThreshold,
+    Color safeColor,
+    Color dangerColor, [
+    Color? middleColor1,
+    Color? middleColor2,
+  ]) {
+    if (value <= minThreshold) return safeColor; // Lower bound: safe color
+    if (value >= maxThreshold) return dangerColor; // Upper bound: danger color
+
+    // Calculate the fraction between minThreshold and maxThreshold
+    double range = maxThreshold - minThreshold;
+    double fraction = (value - minThreshold) / range;
+
+    // Determine the color based on the defined middle colors
+    if (middleColor1 != null && middleColor2 != null) {
+      // Three intervals now exist
+      if (fraction <= 0.33) {
+        // Interpolate between safeColor and middleColor1
+        return interpolateColor(safeColor, middleColor1,
+            fraction * 3); // Multiply by 3 to stretch the fraction
+      } else if (fraction <= 0.67) {
+        // Interpolate between middleColor1 and middleColor2
+        return interpolateColor(middleColor1, middleColor2,
+            (fraction - 0.33) * 3); // Adjust fraction to range from 0 to 1
+      } else {
+        // Interpolate between middleColor2 and dangerColor
+        return interpolateColor(middleColor2, dangerColor,
+            (fraction - 0.67) * 3); // Adjust fraction to range from 0 to 1
+      }
+    } else {
+      // No middle colors; interpolate directly between safeColor and dangerColor
+      return interpolateColor(safeColor, dangerColor, fraction);
     }
   }
 
