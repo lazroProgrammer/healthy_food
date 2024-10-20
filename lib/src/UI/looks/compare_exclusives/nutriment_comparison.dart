@@ -61,7 +61,8 @@ class NutrimentComparisonTable extends StatelessWidget {
             style: TextStyle(
                 color: (entry.value["item1Good"] == null ||
                         (double.parse(entry.value['item1Value']) -
-                                    double.parse(entry.value['item2Value']))
+                                    double.parse(
+                                        entry.value['item2Value'] ?? 0))
                                 .abs() <=
                             entry.value["conversion"])
                     ? Colors.grey
