@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:healthy_food/src/UI/looks/search_field_expanded2.dart';
+import 'package:healthy_food/src/UI/looks/search_field2.dart';
 import 'package:healthy_food/src/UI/looks/search_page_exclusives/result_list_v2.dart';
 
 const RECT_BORDER_RADIUS = 25.0;
@@ -60,10 +60,11 @@ class FormalBubblesSearchPage2 extends StatelessWidget {
                         sigmaY: filterVals[designIndex],
                         tileMode: TileMode.decal),
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 0),
-                      child: SearchFieldExpanded2(
-                        color: cardColors[designIndex],
-                      ),
+                      padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 20),
+                      // child: SearchFieldExpanded2(
+                      //   color: cardColors[designIndex],
+                      // ),
+                      child: SearchWidget(),
                     ),
                   ),
                 ),

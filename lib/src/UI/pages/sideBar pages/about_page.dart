@@ -10,17 +10,22 @@ class AboutPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("About this app"),
       ),
-      body: const Column(
-        children: [
-          Text(
+      body: Container(
+        margin: EdgeInsets.all(20),
+        child: Column(
+          children: [
+            Text(
               """Welcome to our food product app! This app is inspired by the Open Food Facts project and leverages their extensive database to provide you with detailed information on food products. Whether you're looking to make healthier choices, understand nutritional information, or track the eco-impact of your food, this app gives you access to real-time data on thousands of products worldwide.
-
-By using the Open Food Facts API, we aim to bring transparency to your shopping experience, making it easier to find products that match your dietary and environmental preferences.
-
-Our mission is to empower you with the tools to make informed decisions, and we’re constantly working on improving the app to enhance your experience.
-
-Thank you for using our app!""")
-        ],
+      
+      By using the Open Food Facts API, we aim to bring transparency to your shopping experience, making it easier to find products that match your dietary and environmental preferences.
+      
+      Our mission is to empower you with the tools to make informed decisions, and we’re constantly working on improving the app to enhance your experience.
+      
+      Thank you for using our app!""",
+              style: TextStyle(fontSize: 16),
+            )
+          ],
+        ),
       ),
     ));
   }

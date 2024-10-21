@@ -26,6 +26,13 @@ class CompareScannerPage extends ConsumerWidget {
         }
         Navigator.pop(context);
       },
+      errorBuilder: (p0, p1, p2) => Scaffold(
+        body: ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("go back")),
+      ),
     );
   }
 }

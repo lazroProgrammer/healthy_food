@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:healthy_food/src/UI/looks/search_field_expanded2.dart';
+import 'package:healthy_food/src/UI/looks/search_field2.dart';
 import 'package:healthy_food/src/UI/looks/search_page_exclusives/result_list_v2.dart';
 
 //TODO:the search system needs to be improved
@@ -23,8 +23,8 @@ class SearchPage extends StatelessWidget {
               delegate: SliverChildListDelegate([
             // margin: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 0),
             const Padding(
-              padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 0),
-              child: SearchFieldExpanded2(),
+              padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 20),
+              child: SearchWidget(),
             ),
             const ResultListV2(),
           ]))

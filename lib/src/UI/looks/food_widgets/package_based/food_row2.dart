@@ -70,7 +70,7 @@ class _FoodRowState extends ConsumerState<FoodRow2> {
                   Text(
                     widget.item.productName ?? "unknown",
                     style: const TextStyle(
-                      fontSize: 24,
+                      fontSize: 20,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -85,7 +85,7 @@ class _FoodRowState extends ConsumerState<FoodRow2> {
                     height: 54,
                     child: Text("Brand: ${widget.item.brand}",
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.w600,
                         )),
                   ),

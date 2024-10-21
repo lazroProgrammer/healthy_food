@@ -3,8 +3,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:healthy_food/src/Notifiers/design_index_notifier.dart';
 import 'package:healthy_food/src/Notifiers/settings_notifier.dart';
-import 'package:healthy_food/src/UI/looks/search_field.dart';
 import 'package:healthy_food/src/UI/looks/settings_page_exclusives/legend.dart';
+import 'package:healthy_food/src/UI/pages/sideBar%20pages/about_page.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SettingsPage extends HookConsumerWidget {
@@ -152,8 +152,11 @@ class SettingsPage extends HookConsumerWidget {
               leading: const Icon(Icons.text_snippet),
               title: Text(AppLocalizations.of(context)!.terms_of_use),
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const MyHomePage(title: "Yes")));
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      // builder: (context) => const CustomSearchBar(title: "Yes")));
+                      builder: (context) => AboutPage()),
+                );
               },
             ),
             // ExpansionTile(

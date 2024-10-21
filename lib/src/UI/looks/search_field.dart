@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class CustomSearchBar extends StatefulWidget {
+  const CustomSearchBar({super.key, required this.title});
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<CustomSearchBar> createState() => _SearchBarState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _SearchBarState extends State<CustomSearchBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
