@@ -95,6 +95,12 @@ class _FoodCardState extends ConsumerState<FoodCard2> {
                     child: Text(AppLocalizations.of(context)!
                         .brandPut(widget.item.brand ?? "unknown"))),
                 Text(
+                  "Categories:",
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                Text("Categories: ${widget.item.categories ?? "unknown"}"),
+                Text(
                   AppLocalizations.of(context)!.ingredients,
                   style: const TextStyle(
                       fontSize: 18, fontWeight: FontWeight.bold),

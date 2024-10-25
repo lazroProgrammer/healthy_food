@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:healthy_food/src/UI/pages/sideBar%20pages/slides/page1.dart';
 import 'package:healthy_food/src/UI/pages/sideBar%20pages/slides/page2.dart';
 import 'package:healthy_food/src/UI/pages/sideBar%20pages/slides/page3.dart';
@@ -19,10 +20,14 @@ class TutorialSliders extends StatefulWidget {
 
 class _TutorialSlidersState extends State<TutorialSliders> {
   int index = 0;
-  List<String> buttonLabels = ["Next", "Okay"];
+  List<String> buttonLabels = [];
   final PageController _controller = PageController();
   @override
   Widget build(BuildContext context) {
+    buttonLabels = [
+      AppLocalizations.of(context)!.next,
+      AppLocalizations.of(context)!.okay
+    ];
     return Scaffold(
       body: Container(
         padding: EdgeInsets.only(bottom: 80),
@@ -56,7 +61,7 @@ class _TutorialSlidersState extends State<TutorialSliders> {
                   }
                 },
                 child: Text(
-                  "Skip",
+                  AppLocalizations.of(context)!.skip,
                   style: TextStyle(fontSize: 18),
                 )),
             SmoothPageIndicator(controller: _controller, count: PAGE_COUNT),

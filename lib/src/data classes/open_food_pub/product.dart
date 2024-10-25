@@ -536,14 +536,20 @@ class ProductHandler {
         // Only add to the list if value is non-null and greater than zero
         if (value != null && value > 0) {
           // Convert to mg if it's a mineral in grams
-          if (_isMineralInGrams(nutrient)) {
+          if (_isMineralInMg(nutrient)) {
             value = (value * 1000); // Convert to mg
+          } else {
+            if (_isMineralInMicroGram(nutrient)) {
+              value = (value * 1000000);
+            }
           }
 
           nutrimentList.add(NutrimentHandler(
               label: _getNutrientLabel(nutrient), // Get appropriate label
               unit: _getNutrientUnit(nutrient), // Get appropriate unit
-              value: value.toStringAsFixed(2),
+              value: (value > 1000)
+                  ? value.toStringAsFixed(0)
+                  : value.toStringAsFixed(2),
               isGood: _IsGoodNutrient(nutrient),
               conversionRate: conversionRate(nutrient)));
         }
@@ -554,7 +560,7 @@ class ProductHandler {
   }
 
 // Helper function to check if the nutrient is a mineral and in grams
-  static bool _isMineralInGrams(Nutrient nutrient) {
+  static bool _isMineralInMg(Nutrient nutrient) {
     // List of nutrients that should be in milligrams but may be stored as grams
     return nutrient == Nutrient.calcium ||
         nutrient == Nutrient.sodium ||
@@ -568,6 +574,21 @@ class ProductHandler {
         nutrient == Nutrient.copper ||
         nutrient == Nutrient.manganese ||
         nutrient == Nutrient.selenium;
+  }
+
+  static bool _isMineralInMicroGram(Nutrient nutrient) {
+    // List of nutrients that should be in milligrams but may be stored as grams
+    return nutrient == Nutrient.vitaminA ||
+        nutrient == Nutrient.vitaminC ||
+        nutrient == Nutrient.vitaminD ||
+        nutrient == Nutrient.vitaminE ||
+        nutrient == Nutrient.vitaminK ||
+        nutrient == Nutrient.vitaminB1 ||
+        nutrient == Nutrient.vitaminB2 ||
+        nutrient == Nutrient.vitaminPP ||
+        nutrient == Nutrient.vitaminB6 ||
+        nutrient == Nutrient.vitaminB12 ||
+        nutrient == Nutrient.cholesterol;
   }
 
 // Helper function to get the appropriate label for each nutrient
@@ -610,6 +631,8 @@ class ProductHandler {
       case Nutrient.vitaminPP:
       case Nutrient.vitaminB6:
       case Nutrient.vitaminB12:
+      case Nutrient.cholesterol:
+        return 'µg';
       case Nutrient.calcium:
       case Nutrient.iron:
       case Nutrient.magnesium:
@@ -624,8 +647,7 @@ class ProductHandler {
       case Nutrient.chloride:
       case Nutrient.bicarbonate:
         return 'mg'; // Minerals will be converted to mg
-      case Nutrient.cholesterol:
-        return 'mg';
+
       default:
         return ''; // Default case if unit is not defined
     }

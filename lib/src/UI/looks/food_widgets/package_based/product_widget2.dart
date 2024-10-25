@@ -4,6 +4,7 @@ import 'package:healthy_food/src/UI/looks/food_widgets/package_based/food_card2.
 import 'package:healthy_food/src/UI/looks/food_widgets/package_based/nutrient_widget2.dart';
 import 'package:healthy_food/src/data%20classes/open_food_pub/product.dart';
 
+//TODO: Products categories filtering, we need a formalized group of categories to show and not the 10000+ groups of OFFacts
 class ProductHandlerWidget extends StatelessWidget {
   final ProductHandler product;
 

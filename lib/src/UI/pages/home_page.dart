@@ -70,6 +70,16 @@ class _MyWidgetState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final localizationMap = {
+      "Food tracker": AppLocalizations.of(context)!.food_tracker,
+      "Analytics": AppLocalizations.of(context)!.analytics,
+      "Search for a product":
+          AppLocalizations.of(context)!.search_for_a_product,
+      "barcode scan": AppLocalizations.of(context)!.barcode_scan,
+      "Compare products": AppLocalizations.of(context)!.compare_products,
+      "Recipe selector": AppLocalizations.of(context)!.recipe_selector,
+      "scores infos": AppLocalizations.of(context)!.food_tracker,
+    };
     final dark = ref.watch(darkmodeNotifier);
     //! intential (- 1)
     final designIndex = ref.watch(appStyleNotifier) - 1;
@@ -147,7 +157,7 @@ class _MyWidgetState extends ConsumerState<HomePage> {
                                                 )
                                               : Icon(icons[index])))),
                               Text(
-                                labels[index],
+                                localizationMap[labels[index]]!,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 18),
                                 textAlign: TextAlign.center,

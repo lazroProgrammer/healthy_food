@@ -3,6 +3,18 @@
     ,"search":"search"
     ,"results":"Results"
     ,"home":"Home"
+    ,"food_tracker":"Food tracker"
+    ,"analytics":"Analytics"
+    ,"search_for_a_product":"Search for a product"
+    ,"barcode_scan":"Barcode scan"
+    ,"compare_products":"Compare products"
+    ,"recipe_selector":"Recipe selector"
+    ,"scores_infos":"Scores infos"
+
+    ,"skip":"Skip"
+    ,"next":"Next"
+    ,"okay":"Okay"
+
     ,"profile":"profile"
     ,"app_tutorial":"app tutorial"
     ,"about_us":"About Us"
@@ -25,14 +37,21 @@
         "example": "danone"
       }
     }}
+    ,"categories":"Categories:"
     ,"ingredients":"Ingredients:"
     ,"product_details": "Product Details"
     ,"nutritional_information":"Nutritional Informations:"
     ,"settings": "Settings"
+    ,"preferences":"preferences"
       ,"darkmode": "Darkmode"
       ,"app_ui": "App UI"
         ,"simple": "simple"
         ,"complex": "complex"
+    ,"dataSaver":"dataSaver"
+    ,"search_preferences":"Search preferences"
+    ,"show_additional_infos":"show additional infos"
+    ,"preffered_region":"Preffered Region"
+    ,"technical":"technical"
     ,"terms_of_use": "terms of use"
     ,"about":"About"
     ,"bug_report": "Bug report"
@@ -58,7 +77,8 @@
     ,"beverage_preparations":"beverage preparations"
     ,"fermented_foods":"fermented foods"
     ,"pasteurised_products":"pasteurised products"
-    ,"unpasteurised_products":"unpasteurised products"
+
+    ,"nutriment_data_is_missing":"Nutriment data is missing"
 
 
     ,"nutrient": "Nutrient"
@@ -76,5 +96,14 @@
     ,"sugars":"sugars"
     ,"salt":"salt"
     ,"sodium":"sodium"
+    ,"calcium":"calcium"
+    ,"potassium": "potassium"
+    ,"iron":"iron"
+    ,"cholesterol":"cholesterol"
+    ,"vitamin_A":"vitamin A"
+    ,"vitamin_B":"vitamin B"
+    ,"vitamin_C":"vitamin C"
+    ,"vitamin_D":"vitamin D"
+    ,"vitamin_B12":"vitamin B12"
     } 
  

@@ -33,17 +33,26 @@ class _NutrientTableWidgetState extends ConsumerState<NutrientTableWidget2> {
   Widget build(BuildContext context) {
     final dark = ref.watch(darkmodeNotifier);
     names = {
-      // "carbohydrates": AppLocalizations.of(context)!.carbohydrates,
-      // "energy": AppLocalizations.of(context)!.energy,
-      // "energy-kcal": AppLocalizations.of(context)!.energy_kcal,
-      // "energy-kj": AppLocalizations.of(context)!.energy_kj,
-      // "fat": AppLocalizations.of(context)!.fat,
-      // "fiber": AppLocalizations.of(context)!.fiber,
-      // "proteins": AppLocalizations.of(context)!.proteins,
-      // "saturated-fat": AppLocalizations.of(context)!.saturated_fat,
-      // "sugars": AppLocalizations.of(context)!.sugars,
-      // "salt": AppLocalizations.of(context)!.salt,
-      // "sodium": AppLocalizations.of(context)!.sodium,
+      "carbohydrates": AppLocalizations.of(context)!.carbohydrates,
+      "energy": AppLocalizations.of(context)!.energy,
+      "energy KCal": AppLocalizations.of(context)!.energy_kcal,
+      "energy KJ": AppLocalizations.of(context)!.energy_kj,
+      "fat": AppLocalizations.of(context)!.fat,
+      "fiber": AppLocalizations.of(context)!.fiber,
+      "proteins": AppLocalizations.of(context)!.proteins,
+      "saturated Fat": AppLocalizations.of(context)!.saturated_fat,
+      "sugars": AppLocalizations.of(context)!.sugars,
+      "salt": AppLocalizations.of(context)!.salt,
+      "sodium": AppLocalizations.of(context)!.sodium,
+      "calcium": AppLocalizations.of(context)!.calcium,
+      "potassium": AppLocalizations.of(context)!.potassium,
+      "iron": AppLocalizations.of(context)!.iron,
+      "cholesterol": AppLocalizations.of(context)!.cholesterol,
+      "vitamin A": AppLocalizations.of(context)!.vitamin_A,
+      "vitamin B": AppLocalizations.of(context)!.vitamin_B,
+      "vitamin C": AppLocalizations.of(context)!.vitamin_C,
+      "vitamin D": AppLocalizations.of(context)!.vitamin_D,
+      "vitamin B12": AppLocalizations.of(context)!.vitamin_B12,
     };
     return (widget.nutrients.isEmpty)
         ? Center(
@@ -69,7 +78,7 @@ class _NutrientTableWidgetState extends ConsumerState<NutrientTableWidget2> {
                   cells: [
                     DataCell(Text((names.isEmpty)
                         ? nutrient.label
-                        : names[nutrient.label] ?? "name not found")),
+                        : names[nutrient.label] ?? nutrient.label)),
                     DataCell(
                         Text("${nutrient.value.toString()}${nutrient.unit}")),
                     // DataCell(Text(nutrient.unit)),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:healthy_food/src/Notifiers/comparison_products_notifier.dart';
 import 'package:healthy_food/src/UI/looks/compare_exclusives/comparison_result.dart';
 import 'package:healthy_food/src/UI/looks/compare_exclusives/food_mini_card.dart';
@@ -36,7 +37,7 @@ class _ComparisonPageState extends ConsumerState<ComparisonPage> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Compare products"),
+          title: Text(AppLocalizations.of(context)!.compare_products),
         ),
         body: (_isloading)
             ? Center(child: CircularProgressIndicator())
@@ -56,7 +57,8 @@ class _ComparisonPageState extends ConsumerState<ComparisonPage> {
                                               CompareScannerPage(
                                                 last: false,
                                               ))),
-                                  child: Text("scan barcode"))
+                                  child: Text(AppLocalizations.of(context)!
+                                      .barcode_scan))
                               : FoodMiniCard(item: item1, last: false),
                           (item2 == null)
                               ? ElevatedButton(
@@ -66,7 +68,8 @@ class _ComparisonPageState extends ConsumerState<ComparisonPage> {
                                               CompareScannerPage(
                                                 last: true,
                                               ))),
-                                  child: Text("scan barcode"))
+                                  child: Text(AppLocalizations.of(context)!
+                                      .barcode_scan))
                               : FoodMiniCard(item: item2, last: true)
                         ],
                       ),

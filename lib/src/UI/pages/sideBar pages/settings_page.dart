@@ -19,8 +19,9 @@ class SettingsPage extends HookConsumerWidget {
         ProductHandler.countriesList[ref.watch(countryNotifier)]);
     bool darkmode = ref.watch(darkmodeNotifier);
     bool dataSaver = ref.watch(dataSaverNotifier);
+    bool detailed = ref.watch(detailedSearchNotifier);
 
-    bool dailyreminder = ref.watch(dailyReminderNotifier);
+    // bool dailyreminder = ref.watch(dailyReminderNotifier);
     // bool deadlinereminder = ref.watch(deadlineReminderNotifier);
     return SafeArea(
       child: Scaffold(
@@ -30,7 +31,7 @@ class SettingsPage extends HookConsumerWidget {
           child: Column(children: [
             SettingGroup(
               icon: Icons.style_rounded,
-              label: "preferences",
+              label: AppLocalizations.of(context)!.preferences,
             ),
             Divider(),
             SwitchListTile(
@@ -68,7 +69,7 @@ class SettingsPage extends HookConsumerWidget {
             ),
             SwitchListTile(
               value: dataSaver,
-              title: const Text("DataSaver"),
+              title: Text(AppLocalizations.of(context)!.dataSaver),
               onChanged: (bool value) {
                 ref.read(dataSaverNotifier.notifier).toggleDataSaver(value);
               },
@@ -80,17 +81,16 @@ class SettingsPage extends HookConsumerWidget {
               height: 10,
             ),
             SettingGroup(
-              icon: Icons.manage_search_rounded,
-              label: "Search preferences",
-            ),
+                icon: Icons.manage_search_rounded,
+                label: AppLocalizations.of(context)!.search_preferences),
             Divider(),
             SwitchListTile(
-              value: dailyreminder,
-              title: const Text("show additional infos"),
+              value: detailed,
+              title: Text(AppLocalizations.of(context)!.show_additional_infos),
               onChanged: (bool value) {
                 ref
-                    .read(dailyReminderNotifier.notifier)
-                    .toggleDailyReminder(value);
+                    .read(detailedSearchNotifier.notifier)
+                    .toggleDetailedSearch(value);
               },
               secondary:
                   // AnimatedIcon(icon: , progress: progress)
@@ -107,7 +107,7 @@ class SettingsPage extends HookConsumerWidget {
             //       const Icon(Icons.data_saver_off),
             // ),
             ListTile(
-              title: Text("Preffered Region"),
+              title: Text(AppLocalizations.of(context)!.preffered_region),
               leading: const Icon(Icons.location_searching),
               trailing: DropdownButton<String>(
                 value: selectedCountry.value,
@@ -133,15 +133,15 @@ class SettingsPage extends HookConsumerWidget {
             ),
             SettingGroup(
               icon: Icons.computer_rounded,
-              label: "technical",
+              label: AppLocalizations.of(context)!.technical,
             ),
             Divider(),
-            ListTile(
-              leading: const Icon(Icons.info),
-              // title: Text(AppLocalizations.of(context)!.solve_common_issues),
-              title: Text("solve common issues"),
-              onTap: () {},
-            ),
+            // ListTile(
+            //   leading: const Icon(Icons.info),
+            //   // title: Text(AppLocalizations.of(context)!.solve_common_issues),
+            //   title: Text("solve common issues"),
+            //   onTap: () {},
+            // ),
             ListTile(
               leading: const Icon(Icons.bug_report),
               title: Text(AppLocalizations.of(context)!.bug_report),
@@ -152,9 +152,7 @@ class SettingsPage extends HookConsumerWidget {
               title: Text(AppLocalizations.of(context)!.terms_of_use),
               onTap: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(
-                      // builder: (context) => const CustomSearchBar(title: "Yes")));
-                      builder: (context) => AboutPage()),
+                  MaterialPageRoute(builder: (context) => AboutPage()),
                 );
               },
             ),
