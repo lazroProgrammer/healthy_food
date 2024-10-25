@@ -5,6 +5,7 @@ import 'package:healthy_food/src/Notifiers/design_index_notifier.dart';
 import 'package:healthy_food/src/Notifiers/settings_notifier.dart';
 import 'package:healthy_food/src/UI/looks/settings_page_exclusives/legend.dart';
 import 'package:healthy_food/src/UI/pages/sideBar%20pages/about_page.dart';
+import 'package:healthy_food/src/data%20classes/open_food_pub/product.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SettingsPage extends HookConsumerWidget {
@@ -14,6 +15,8 @@ class SettingsPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedTheme =
         useState<String?>(themes[ref.watch(appStyleNotifier)]);
+    final selectedCountry = useState<String?>(
+        ProductHandler.countriesList[ref.watch(countryNotifier)]);
     bool darkmode = ref.watch(darkmodeNotifier);
     bool dataSaver = ref.watch(dataSaverNotifier);
 
@@ -107,20 +110,16 @@ class SettingsPage extends HookConsumerWidget {
               title: Text("Preffered Region"),
               leading: const Icon(Icons.location_searching),
               trailing: DropdownButton<String>(
-                value: selectedTheme.value,
+                value: selectedCountry.value,
                 onChanged: (String? newValue) {
                   if (newValue != null) {
-                    //! intential -1 there
-                    ref
-                        .read(designStyleIndexNotifier.notifier)
-                        .setIndex(themes.indexOf(newValue) - 1);
-                    ref
-                        .read(appStyleNotifier.notifier)
-                        .setAppStyle(themes.indexOf(newValue));
+                    ref.read(countryNotifier.notifier).setCountry(
+                        ProductHandler.countriesList.indexOf(newValue));
                   }
-                  selectedTheme.value = newValue;
+                  selectedCountry.value = newValue;
                 },
-                items: themes.map<DropdownMenuItem<String>>((String value) {
+                items: ProductHandler.countriesList
+                    .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),

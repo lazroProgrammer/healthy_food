@@ -5,8 +5,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:healthy_food/src/Notifiers/product_notifier_v2.dart';
+import 'package:healthy_food/src/Notifiers/settings_notifier.dart';
 import 'package:healthy_food/src/Notifiers/tags_notifier.dart';
 import 'package:healthy_food/src/UI/looks/tags_selector_icon_button.dart';
+import 'package:healthy_food/src/data%20classes/open_food_pub/product.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SearchWidget extends ConsumerStatefulWidget {
@@ -91,6 +93,8 @@ class _SearchWidgetState extends ConsumerState<SearchWidget> {
   @override
   Widget build(BuildContext context) {
     final categories = ref.watch(tagNotifierProvider);
+    final country = ref.watch(countryNotifier);
+    final detailed = ref.watch(detailedSearchNotifier);
 
     return SearchAnchor(
       isFullScreen: false,
@@ -116,7 +120,9 @@ class _SearchWidgetState extends ConsumerState<SearchWidget> {
                   await ref.read(productsListNotifier2.notifier).search(
                       limit: 5,
                       searchTerm: controller.text,
-                      categories: categories);
+                      categories: categories,
+                      country: ProductHandler.countriesList[country],
+                      detailed: detailed);
                 } else {
                   Fluttertoast.showToast(msg: "enter something");
                 }

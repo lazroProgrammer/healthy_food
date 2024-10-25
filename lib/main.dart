@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:healthy_food/l10n/l10n.dart';
@@ -10,7 +11,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-//TODO: caching json results for some time (json needs shrinking and careful treatement)
+//TODO: caching json results for some time (json needs shrinking and careful treatement) (DONE BY THE PACKAGE)
 //TODO: arabic and french support (kinda done)
 //TODO: cache system for photos (experimental) with a time period with repitition count and a limiter***
 //TODO: more informations shown in the interface
@@ -28,7 +29,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPreferences.getInstance();
   await SettingsData.init();
-
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   OpenFoodAPIConfiguration.userAgent = UserAgent(
     name: 'TestApp',
     version: '1.0.0',

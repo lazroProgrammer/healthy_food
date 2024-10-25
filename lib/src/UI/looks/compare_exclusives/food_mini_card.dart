@@ -16,7 +16,6 @@ class FoodMiniCard extends ConsumerWidget {
     final dataSaver = ref.watch(dataSaverNotifier);
     return Container(
       width: MediaQuery.of(context).size.width / 2 - 20,
-      height: MediaQuery.of(context).size.width * 2 / 3,
       margin: EdgeInsets.fromLTRB(0, 0, 0, 16),
       padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
       decoration: BoxDecoration(

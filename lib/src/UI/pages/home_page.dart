@@ -124,8 +124,9 @@ class _MyWidgetState extends ConsumerState<HomePage> {
                             }
                           }
                         },
-                        splashColor:
-                            (dark) ? Colors.orange[700] : Colors.orange[300],
+                        splashColor: (dark)
+                            ? Colors.orange[700]
+                            : const Color.fromARGB(255, 247, 201, 174),
                         borderRadius: BorderRadius.circular(12),
                         child: Container(
                           margin: EdgeInsets.fromLTRB(10, 10, 10, 6),

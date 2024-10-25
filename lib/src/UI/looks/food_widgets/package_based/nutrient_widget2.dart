@@ -5,7 +5,7 @@ import 'package:healthy_food/src/data%20classes/open_food_pub/nutriment.dart';
 import 'package:healthy_food/src/data%20classes/open_food_pub/product.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-//TODO: show green and red values in tables in order to show if the nutrient level is good
+//TODO: show green and red values in tables in order to show if the nutrient level is good (DONE BETTER)
 class NutrientTableWidget2 extends ConsumerStatefulWidget {
   final List<NutrimentHandler> nutrients;
 
@@ -45,30 +45,36 @@ class _NutrientTableWidgetState extends ConsumerState<NutrientTableWidget2> {
       // "salt": AppLocalizations.of(context)!.salt,
       // "sodium": AppLocalizations.of(context)!.sodium,
     };
-    return DataTable(
-      headingRowColor: WidgetStateColor.resolveWith((Set<WidgetState> states) {
-        return Colors.grey;
-      }),
-      columns: [
-        DataColumn(label: Text(AppLocalizations.of(context)!.nutrient)),
-        DataColumn(label: Text(AppLocalizations.of(context)!.value_100)),
-        // DataColumn(label: Text(AppLocalizations.of(context)!.unit)),
-      ],
-      rows: widget.nutrients.map((nutrient) {
-        return DataRow(
-            color: WidgetStateProperty.resolveWith<Color?>(
-                (Set<WidgetState> states) {
-              return ProductHandler.getNutrientGradientColor(
-                  nutrient.label, double.parse(nutrient.value), dark);
+    return (widget.nutrients.isEmpty)
+        ? Center(
+            child: Text("Nutriment data is missing"),
+          )
+        : DataTable(
+            headingRowColor:
+                WidgetStateColor.resolveWith((Set<WidgetState> states) {
+              return Colors.grey;
             }),
-            cells: [
-              DataCell(Text((names.isEmpty)
-                  ? nutrient.label
-                  : names[nutrient.label] ?? "name not found")),
-              DataCell(Text("${nutrient.value.toString()}${nutrient.unit}")),
-              // DataCell(Text(nutrient.unit)),
-            ]);
-      }).toList(),
-    );
+            columns: [
+              DataColumn(label: Text(AppLocalizations.of(context)!.nutrient)),
+              DataColumn(label: Text(AppLocalizations.of(context)!.value_100)),
+              // DataColumn(label: Text(AppLocalizations.of(context)!.unit)),
+            ],
+            rows: widget.nutrients.map((nutrient) {
+              return DataRow(
+                  color: WidgetStateProperty.resolveWith<Color?>(
+                      (Set<WidgetState> states) {
+                    return ProductHandler.getNutrientGradientColor(
+                        nutrient.label, double.parse(nutrient.value), dark);
+                  }),
+                  cells: [
+                    DataCell(Text((names.isEmpty)
+                        ? nutrient.label
+                        : names[nutrient.label] ?? "name not found")),
+                    DataCell(
+                        Text("${nutrient.value.toString()}${nutrient.unit}")),
+                    // DataCell(Text(nutrient.unit)),
+                  ]);
+            }).toList(),
+          );
   }
 }

@@ -6,9 +6,14 @@ final darkmodeNotifier =
 
 final appStyleNotifier =
     StateNotifierProvider<AppStyleNotifier, int>((ref) => AppStyleNotifier());
+final countryNotifier =
+    StateNotifierProvider<CountryNotifier, int>((ref) => CountryNotifier());
 
 final dataSaverNotifier = StateNotifierProvider<DataSaverNotifier, bool>(
     (ref) => DataSaverNotifier());
+final detailedSearchNotifier =
+    StateNotifierProvider<DetailedSearchNotifier, bool>(
+        (ref) => DetailedSearchNotifier());
 
 final allowNotificationsNotifier =
     StateNotifierProvider<AllowNotificationNotifier, bool>(
@@ -37,10 +42,26 @@ class AppStyleNotifier extends StateNotifier<int> {
   }
 }
 
+class CountryNotifier extends StateNotifier<int> {
+  CountryNotifier() : super(SettingsData().country);
+  void setCountry(int v) {
+    SettingsData().update(countryP: v);
+    state = v;
+  }
+}
+
 class DataSaverNotifier extends StateNotifier<bool> {
   DataSaverNotifier() : super(SettingsData().dataSaver);
   void toggleDataSaver(bool v) {
     SettingsData().update(dataSaver: v);
+    state = v;
+  }
+}
+
+class DetailedSearchNotifier extends StateNotifier<bool> {
+  DetailedSearchNotifier() : super(SettingsData().detailedSearch);
+  void toggleDetailedSearch(bool v) {
+    SettingsData().update(detailedSearch: v);
     state = v;
   }
 }

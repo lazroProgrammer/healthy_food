@@ -1,13 +1,119 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:healthy_food/src/data%20classes/open_food_pub/nutriment.dart';
 import 'package:logger/logger.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
 
+const int TIMEOUT_NORMAL = 15;
+const int TIMEOUT_DATASAVER = 20;
+
 //TODO: vitamins needs to be converted to micrograms
 class ProductHandler {
   static Logger log = Logger();
+  static const countriesList = [
+    "World",
+    "Albania",
+    "Algeria",
+    "Andorra",
+    "Argentina",
+    "Australia",
+    "Austria",
+    "Belarus",
+    "Belgium",
+    "Bolivia",
+    "Bosnia and Herzegovina",
+    "Brazil",
+    "Bulgaria",
+    "Canada",
+    "Chile",
+    "China",
+    "Colombia",
+    "Costa Rica",
+    "Croatia",
+    "Cuba",
+    "Cyprus",
+    "Czech Republic",
+    "Côte d'Ivoire",
+    "Denmark",
+    "Deutschland",
+    "Dominican Republic",
+    "Ecuador",
+    "Egypt",
+    "El Salvador",
+    "Estonia",
+    "Finland",
+    "France",
+    "French Polynesia",
+    "Georgia",
+    "Germany",
+    "Greece",
+    "Guadeloupe",
+    "Hong Kong",
+    "Hungary",
+    "Iceland",
+    "India",
+    "Indonesia",
+    "Iraq",
+    "Ireland",
+    "Israel",
+    "Italy",
+    "Japan",
+    "Jordan",
+    "Kuwait",
+    "Latvia",
+    "Lebanon",
+    "Lithuania",
+    "Luxembourg",
+    "Malaysia",
+    "Malta",
+    "Martinique",
+    "Mauritius",
+    "Mexico",
+    "Moldova",
+    "Morocco",
+    "Netherlands",
+    "New Caledonia",
+    "New Zealand",
+    "North Macedonia",
+    "Norway",
+    "Pakistan",
+    "Panama",
+    "Paraguay",
+    "Peru",
+    "Philippines",
+    "Poland",
+    "Portugal",
+    "Puerto Rico",
+    "Qatar",
+    "Romania",
+    "Russia",
+    "Réunion",
+    "Saudi Arabia",
+    "Senegal",
+    "Serbia",
+    "Singapore",
+    "Slovakia",
+    "Slovenia",
+    "South Africa",
+    "South Korea",
+    "Spain",
+    "Sweden",
+    "Switzerland",
+    "Taiwan",
+    "Thailand",
+    "Tunisia",
+    "Turkey",
+    "Turkiye",
+    "Ukraine",
+    "United Arab Emirates",
+    "United Kingdom",
+    "United States",
+    "Uruguay",
+    "Venezuela",
+    "Vietnam"
+  ];
   String? barcode;
   String? productName;
   String? ingredients;
@@ -28,16 +134,20 @@ class ProductHandler {
   String? countries;
   String imageUrl = "";
 
-  static Future<ProductHandler> fetchProductDataByCode(String barcode) async {
+  static Future<ProductHandler?> fetchProductDataByCode(String barcode) async {
     try {
       ProductHandler p = ProductHandler();
+
       ProductResultV3 result = await OpenFoodAPIClient.getProductV3(
-          ProductQueryConfiguration(barcode, version: ProductQueryVersion.v3));
+              ProductQueryConfiguration(barcode,
+                  version: ProductQueryVersion.v3))
+          .timeout(const Duration(seconds: TIMEOUT_NORMAL), onTimeout: () {
+        throw TimeoutException("Request to fetch product data timed out");
+      });
 
       p.barcode = result.product?.barcode;
       p.productName = result.product?.productName;
       p.ingredients = result.product?.ingredientsText;
-      // nutrients = result.product?.nutriments;
       p.packagingInfo = result.product?.packaging;
       p.allergens = result.product?.allergens?.names;
       p.nutriScore = result.product?.nutriscore;
@@ -54,10 +164,15 @@ class ProductHandler {
       p.countries = result.product?.countries;
       p.imageUrl = result.product?.imageFrontUrl ?? "";
       p.nutriments = getNutrimentsFromProduct(result.product!);
+
       return p;
+    } on TimeoutException catch (_) {
+      Fluttertoast.showToast(msg: "Request to fetch product data timed out");
+      return null;
     } catch (e) {
       log.e('Error fetching product data: $e');
-      throw Exception();
+      return null;
+      // throw Exception();
     }
   }
 
@@ -90,14 +205,18 @@ class ProductHandler {
           ProductField.NOVA_GROUP,
           ProductField.NUTRISCORE,
           ProductField.QUANTITY,
+          ProductField.CATEGORIES
           // Nutriments information
         ],
         parametersList: [
           if (name != null) SearchTerms(terms: [name]),
           for (var i in categories)
             TagFilter.fromType(
-                tagFilterType: TagFilterType.CATEGORIES,
-                tagName: i), // Search by product name
+                tagFilterType: TagFilterType.CATEGORIES, tagName: i),
+          if (country != null && country != "world")
+            TagFilter.fromType(
+                tagFilterType: TagFilterType.COUNTRIES,
+                tagName: country), // Search by product name
           if (brand != null) SearchTerms(terms: [brand]), // Search by brand
           if (store != null) SearchTerms(terms: [store]), // Search by store
           if (ingredient != null)
@@ -112,8 +231,85 @@ class ProductHandler {
             SearchTerms(terms: [allergen]), // Search by allergens
           if (packaging != null)
             SearchTerms(terms: [packaging]), // Search by packaging type
-          if (country != null)
-            SearchTerms(terms: [country]), // Search by country
+          if (trace != null)
+            SearchTerms(
+                terms: [trace]), // Search by traces (e.g., traces of nuts)
+        ],
+        version: ProductQueryVersion.v3, // Specify the version of the API
+      );
+
+      // Perform the search request
+      SearchResult result =
+          await OpenFoodAPIClient.searchProducts(null, searchConfig);
+      for (var element in retrieveProducts(result)) {
+        log.i(element);
+      }
+      return result;
+    } on Exception catch (e) {
+      log.e("Error fetching products: $e");
+    }
+    return null;
+  }
+
+  static Future<SearchResult?> searchProductsDetailed({
+    String? name, // Search by product name
+    String? brand, // Search by brand name
+    String? store, // Search by store
+    String? ingredient, // Search by ingredients
+    required List<String> categories, // Search by category (Pnns2)
+    String? nutritionGrade, // Search by nutrition grade (A, B, C, etc.)
+    String? additive, // Search by additives (e.g., E numbers)
+    String? label, // Search by product labels (e.g., organic, fair-trade)
+    String? allergen, // Search by allergens (e.g., gluten, nuts)
+    String? packaging, // Search by packaging (e.g., bottle, box)
+    String? country, // Search by country (e.g., France, USA)
+    String? trace, // Search by traces (e.g., traces of nuts)
+  }) async {
+    // Create a search configuration based on the provided consumer-oriented filters
+    try {
+      ProductSearchQueryConfiguration searchConfig =
+          ProductSearchQueryConfiguration(
+        fields: [
+          ProductField.BARCODE,
+          ProductField.NAME, // Product name
+          ProductField.BRANDS, // Brand information
+          ProductField.IMAGE_FRONT_URL, // Product photo
+          ProductField.INGREDIENTS_TEXT, // Ingredients
+          ProductField.NUTRIMENTS,
+          ProductField.ECOSCORE_GRADE,
+          ProductField.NOVA_GROUP,
+          ProductField.NUTRISCORE,
+          ProductField.QUANTITY,
+          ProductField.ADDITIVES,
+          ProductField.ALLERGENS,
+          ProductField.PACKAGING,
+          ProductField.CATEGORIES,
+          ProductField.ORIGINS,
+          // Nutriments information
+        ],
+        parametersList: [
+          if (name != null) SearchTerms(terms: [name]),
+          for (var i in categories)
+            TagFilter.fromType(
+                tagFilterType: TagFilterType.CATEGORIES, tagName: i),
+          if (country != null && country != "world")
+            TagFilter.fromType(
+                tagFilterType: TagFilterType.COUNTRIES,
+                tagName: country), // Search by product name
+          if (brand != null) SearchTerms(terms: [brand]), // Search by brand
+          if (store != null) SearchTerms(terms: [store]), // Search by store
+          if (ingredient != null)
+            SearchTerms(terms: [ingredient]), // Search by ingredient
+          if (nutritionGrade != null)
+            SearchTerms(terms: [nutritionGrade]), // Search by nutrition grade
+          if (additive != null)
+            SearchTerms(terms: [additive]), // Search by additives
+          if (label != null)
+            SearchTerms(terms: [label]), // Search by product labels
+          if (allergen != null)
+            SearchTerms(terms: [allergen]), // Search by allergens
+          if (packaging != null)
+            SearchTerms(terms: [packaging]), // Search by packaging type
           if (trace != null)
             SearchTerms(
                 terms: [trace]), // Search by traces (e.g., traces of nuts)
@@ -156,7 +352,9 @@ class ProductHandler {
     // nutrients = product.nutriments;
     p.barcode = product.barcode;
     p.packagingInfo = product.packaging;
-    p.allergens = product.allergens?.names;
+    p.allergens = (product.allergens != null)
+        ? List.from(product.allergens!.names)
+        : null;
     p.nutriScore = product.nutriscore;
     p.novaGroup = product.novaGroup;
     p.ecoScore = product.ecoscoreGrade;
@@ -164,7 +362,9 @@ class ProductHandler {
     p.quantity = product.quantity;
     p.categories = product.categories;
     p.origins = product.origins;
-    p.additives = product.additives?.names;
+    p.additives = (product.additives != null)
+        ? List.from(product.additives!.names)
+        : null;
     p.labels = product.labelsTags;
     p.servingSize = product.servingSize;
     p.stores = product.stores;
@@ -177,8 +377,18 @@ class ProductHandler {
   }
 
   static Future<List<ProductHandler>> search(
-      {String? name, required List<String> categories}) async {
-    final responce = await searchProducts(name: name, categories: categories);
+      {String? name,
+      required List<String> categories,
+      required String? country,
+      bool? detailed}) async {
+    SearchResult? responce;
+    if (detailed == null || !detailed) {
+      responce = await searchProducts(
+          name: name, categories: categories, country: country);
+    } else {
+      responce = await searchProductsDetailed(
+          name: name, categories: categories, country: country);
+    }
     List<ProductHandler> result = [];
     if (responce != null) {
       result = retrieveProducts(responce);
@@ -626,17 +836,6 @@ class ProductHandler {
     }
   }
 
-// // Helper function to compute gradient color based on value and thresholds
-//   static Color getGradientColor(double value, double minThreshold,
-//       double maxThreshold, Color startColor, Color endColor) {
-//     if (value <= minThreshold) return startColor; // Safe range (green)
-//     if (value >= maxThreshold) return endColor; // Dangerous range (red)
-
-//     // Interpolate between startColor and endColor
-//     double fraction = (value - minThreshold) / (maxThreshold - minThreshold);
-//     return interpolateColor(startColor, endColor, fraction);
-//   }
-
   // Function to get a gradient color based on nutrient amount, using getNutrientColor logic
   static Color? getNutrientGradientColor(
       String nutrientType, double value, bool dark) {
@@ -682,33 +881,6 @@ class ProductHandler {
   }
 
   // Helper function to compute gradient color based on value and thresholds
-  // static Color getGradientColor(double value, double minThreshold,
-  //     double maxThreshold, Color safeColor, Color dangerColor,
-  //     [Color? middleColor1, Color? middleColor2]) {
-  //   if (value <= minThreshold) return safeColor; // Lower bound: safe color
-  //   if (value >= maxThreshold) return dangerColor; // Upper bound: danger color
-
-  //   // Calculate the fraction between minThreshold and maxThreshold
-  //   double range = maxThreshold - minThreshold;
-  //   double fraction = (value - minThreshold) / range;
-
-  //   // Determine the color based on the defined middle colors
-  //   if (middleColor1 != null && middleColor2 != null) {
-  //     // Middle intervals exist
-  //     if (fraction <= 0.5) {
-  //       // Interpolate between safeColor and middleColor1
-  //       return interpolateColor(safeColor, middleColor1, fraction * 2);
-  //     } else {
-  //       // Interpolate between middleColor1 and middleColor2, then to dangerColor
-  //       return interpolateColor(
-  //               middleColor1, middleColor2, (fraction - 0.5) * 2) ??
-  //           interpolateColor(middleColor2, dangerColor, ((fraction - 0.5) * 2));
-  //     }
-  //   } else {
-  //     // No middle colors; interpolate directly between safeColor and dangerColor
-  //     return interpolateColor(safeColor, dangerColor, fraction);
-  //   }
-  // }
   static Color getGradientColor(
     double value,
     double minThreshold,

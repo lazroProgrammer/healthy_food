@@ -12,7 +12,9 @@ class SettingsData {
   static const isLoggedKey = 'login';
   static const darkmodeKey = 'darkmode';
   static const appStyleKey = 'appStyleKey';
+  static const countryKey = 'countryKey';
   static const dataSaverKey = 'dataSaverKey';
+  static const detailedSearchKey = "detailedSearchKey";
   static const allowNotificationKey = 'allowNotification';
   static const dailyReminderKey = 'dailyReminder';
   static const deadlineKey = 'deadline';
@@ -21,7 +23,9 @@ class SettingsData {
   static final SettingsData _instance = SettingsData._internal();
   late bool darkmode;
   late int appStyle;
+  late int country;
   late bool dataSaver;
+  late bool detailedSearch;
   late bool allowNotifications;
   late bool dailyReminder;
   late bool deadlineReminder;
@@ -34,34 +38,12 @@ class SettingsData {
   SettingsData._internal() {
     darkmode = getdark() ?? false;
     appStyle = getStyle() ?? 0;
+    country = getCountry() ?? 0;
     dataSaver = getdataSaver() ?? false;
+    detailedSearch = getDetailedSearch() ?? false;
     allowNotifications = getNotification() ?? false;
     dailyReminder = getDailyReminder() ?? false;
     deadlineReminder = getDeadlineReminder() ?? false;
-
-    // localDb.collection("settings").doc(localId).get().then((json) {
-    //   print("Settings json: $json");
-    //   if (json != null) {
-    //     darkmode = json["darkmode"] as bool;
-    //     allowNotifications = json["notifications"] as bool;
-    //     dailyReminder = json["dailyReminder"] as bool;
-    //     deadlineReminder = json["deadlineReminder"] as bool;
-    //     currency = json["currency"] as String;
-    //   } else {
-    //     darkmode = false;
-    //     allowNotifications = true;
-    //     dailyReminder = false;
-    //     deadlineReminder = false;
-    //     currency = "USD";
-    //     update(
-    //       darkTheme: false,
-    //       notifications: true,
-    //       dailyReminderP: false,
-    //       deadlineReminderP: false,
-    //       currencyP: "USD",
-    //     );
-    //   }
-    // });
   }
 
   static Future init() async =>
@@ -85,11 +67,23 @@ class SettingsData {
 
   static int? getStyle() => _preferences.getInt(appStyleKey);
 
+  static Future setCountry(int b) async {
+    await _preferences.setInt(countryKey, b);
+  }
+
+  static int? getCountry() => _preferences.getInt(countryKey);
+
   static Future setdataSaver(bool b) async {
     await _preferences.setBool(dataSaverKey, b);
   }
 
   static bool? getdataSaver() => _preferences.getBool(dataSaverKey);
+
+  static Future setDetailedSearch(bool b) async {
+    await _preferences.setBool(detailedSearchKey, b);
+  }
+
+  static bool? getDetailedSearch() => _preferences.getBool(detailedSearchKey);
 
   static Future setNotification(bool b) async {
     await _preferences.setBool(allowNotificationKey, b);
@@ -112,25 +106,26 @@ class SettingsData {
   void update(
       {bool? darkTheme,
       int? appStyle,
+      int? countryP,
       bool? dataSaver,
+      bool? detailedSearch,
       bool? notifications,
       bool? dailyReminderP,
       bool? deadlineReminderP}) {
-    // localDb.collection("settings").doc(localId).set({
-    //   "darkmode": darkTheme ?? darkmode,
-    //   "notifications": notifications ?? allowNotifications,
-    //   "dailyReminder": dailyReminderP ?? dailyReminder,
-    //   "deadlineReminder": deadlineReminderP ?? deadlineReminder,
-    //   "currency": currencyP ?? currency
-    // });
     if (darkTheme != null) {
       setdark(darkTheme);
     }
     if (appStyle != null) {
       setStyle(appStyle);
     }
+    if (countryP != null) {
+      setStyle(countryP);
+    }
     if (dataSaver != null) {
       setdataSaver(dataSaver);
+    }
+    if (detailedSearch != null) {
+      setdataSaver(detailedSearch);
     }
     if (notifications != null) {
       setNotification(notifications);

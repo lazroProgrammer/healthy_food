@@ -5,6 +5,7 @@ import 'package:healthy_food/src/Notifiers/settings_notifier.dart';
 import 'package:healthy_food/src/Notifiers/tags_notifier.dart';
 import 'package:healthy_food/src/UI/looks/selected_categories.dart';
 import 'package:healthy_food/src/UI/looks/tags_selector_button.dart';
+import 'package:healthy_food/src/data%20classes/open_food_pub/product.dart';
 import 'package:healthy_food/src/data%20classes/product.dart';
 import 'package:healthy_food/src/logic%20based/code_reader.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -33,6 +34,8 @@ class _MyWidgetState extends ConsumerState<SearchFieldExpanded2> {
   Widget build(BuildContext context) {
     final dark = ref.watch(darkmodeNotifier);
     final categories = ref.watch(tagNotifierProvider);
+    final country = ref.watch(countryNotifier);
+    final detailed = ref.watch(detailedSearchNotifier);
     return GestureDetector(
       onTap: () {
         _focusNode1.unfocus();
@@ -124,7 +127,12 @@ class _MyWidgetState extends ConsumerState<SearchFieldExpanded2> {
                                           .search(
                                               limit: 5,
                                               searchTerm: searchTEC.text,
-                                              categories: categories);
+                                              categories: categories,
+                                              country: ProductHandler
+                                                  .countriesList[country]
+                                                  .toLowerCase()
+                                                  .trim(),
+                                              detailed: detailed);
                                     },
                               child: Text(AppLocalizations.of(context)!.search),
                             )

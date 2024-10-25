@@ -7,9 +7,14 @@ class ProductHandlerNotifier extends StateNotifier<List<ProductHandler>> {
   Future<bool> search(
       {int limit = 10,
       required List<String> categories,
+      required String? country,
+      required bool? detailed,
       String? searchTerm}) async {
-    state =
-        await ProductHandler.search(name: searchTerm, categories: categories);
+    state = await ProductHandler.search(
+        name: searchTerm,
+        categories: categories,
+        country: country,
+        detailed: detailed);
     // Logger().i(state);
     return false;
   }
