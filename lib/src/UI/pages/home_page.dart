@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:healthy_food/src/Notifiers/settings_notifier.dart';
 import 'package:healthy_food/src/UI/pages/compare_page.dart';
+import 'package:healthy_food/src/UI/pages/food_track_page.dart';
 import 'package:healthy_food/src/UI/pages/formal_design_search2.dart';
 import 'package:healthy_food/src/UI/pages/search_page.dart';
 import 'package:healthy_food/src/UI/pages/side_bar.dart';
@@ -43,7 +44,7 @@ class _MyWidgetState extends ConsumerState<HomePage> {
     Icons.info_outline,
   ];
   static final List<Widget?> widgets = [
-    null,
+    FoodTrackingPage(),
     null,
     SearchPage(),
     ScannerPage(),

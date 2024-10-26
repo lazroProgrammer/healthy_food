@@ -17,13 +17,14 @@ class ResultListV2 extends ConsumerWidget {
       margin: const EdgeInsets.fromLTRB(20.0, 0, 20.0, 0),
       padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
-          color: (color != null)
-              ? color
-              : dark
-                  ? Colors.white10
-                  // : Colors.white60,
-                  : Colors.black12),
+        borderRadius: BorderRadius.circular(14),
+        color: (color != null)
+            ? color
+            : dark
+                ? Colors.white10
+                : Colors.white,
+        // : Colors.black12
+      ),
       child: SizedBox(
         height: MediaQuery.of(context).size.height - 200,
         child: Column(

@@ -8,8 +8,8 @@ import 'package:openfoodfacts/openfoodfacts.dart';
 
 const int TIMEOUT_NORMAL = 15;
 const int TIMEOUT_DATASAVER = 20;
+//TODO: fetch the same values on search and remove the detailed search and search branching (make searchDetailed the normal search)
 
-//TODO: vitamins needs to be converted to micrograms
 class ProductHandler {
   static Logger log = Logger();
   static const countriesList = [
