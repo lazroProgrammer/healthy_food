@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:healthy_food/src/Notifiers/product_notifier_v2.dart';
+import 'package:healthy_food/src/Notifiers/future_product_notifer.dart';
 import 'package:healthy_food/src/Notifiers/settings_notifier.dart';
 import 'package:healthy_food/src/Notifiers/tags_notifier.dart';
 import 'package:healthy_food/src/UI/looks/selected_categories.dart';
@@ -121,11 +121,22 @@ class _MyWidgetState extends ConsumerState<SearchFieldExpanded2> {
                                       : Colors.green[200])),
                               onPressed: (disabledB)
                                   ? null
-                                  : () async {
-                                      await ref
-                                          .read(productsListNotifier2.notifier)
-                                          .search(
-                                              limit: 5,
+                                  : () {
+                                      // await ref
+                                      //     .read(productsListNotifier2.notifier)
+                                      //     .search(
+                                      //         searchTerm: searchTEC.text,
+                                      //         categories: categories,
+                                      //         country: ProductHandler
+                                      //             .countriesList[country]
+                                      //             .toLowerCase()
+                                      //             .trim(),
+                                      //         detailed: detailed);
+                                      ref
+                                              .read(productSearchParamsProvider
+                                                  .notifier)
+                                              .state =
+                                          ProductSearchParams(
                                               searchTerm: searchTEC.text,
                                               categories: categories,
                                               country: ProductHandler

@@ -4,7 +4,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:healthy_food/src/Notifiers/product_notifier_v2.dart';
+import 'package:healthy_food/src/Notifiers/future_product_notifer.dart';
 import 'package:healthy_food/src/Notifiers/settings_notifier.dart';
 import 'package:healthy_food/src/Notifiers/tags_notifier.dart';
 import 'package:healthy_food/src/UI/looks/tags_selector_icon_button.dart';
@@ -117,12 +117,19 @@ class _SearchWidgetState extends ConsumerState<SearchWidget> {
                       terms.insert(0, controller.text.trim());
                     });
                   }
-                  await ref.read(productsListNotifier2.notifier).search(
-                      limit: 5,
-                      searchTerm: controller.text,
-                      categories: categories,
-                      country: ProductHandler.countriesList[country],
-                      detailed: detailed);
+                  // await ref.read(productsListNotifier2.notifier).search(
+                  //     searchTerm: controller.text,
+                  //     categories: categories,
+                  //     country: ProductHandler.countriesList[country],
+                  //     detailed: detailed);
+                  ref.read(productSearchParamsProvider.notifier).state =
+                      ProductSearchParams(
+                          searchTerm: controller.text,
+                          categories: categories,
+                          country: ProductHandler.countriesList[country]
+                              .toLowerCase()
+                              .trim(),
+                          detailed: detailed);
                 } else {
                   Fluttertoast.showToast(msg: "enter something");
                 }

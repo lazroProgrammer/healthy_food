@@ -5,8 +5,7 @@ class ProductHandlerNotifier extends StateNotifier<List<ProductHandler>> {
   ProductHandlerNotifier() : super([]);
 
   Future<bool> search(
-      {int limit = 10,
-      required List<String> categories,
+      {required List<String> categories,
       required String? country,
       required bool? detailed,
       String? searchTerm}) async {
