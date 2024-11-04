@@ -5,7 +5,7 @@ import 'package:healthy_food/src/data%20classes/open_food_pub/nutriment.dart';
 import 'package:healthy_food/src/data%20classes/open_food_pub/product.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-//TODO: show green and red values in tables in order to show if the nutrient level is good (DONE BETTER)
+//TODO: need to improve the danger level of nutriments
 class NutrientTableWidget2 extends ConsumerStatefulWidget {
   final List<NutrimentHandler> nutrients;
 

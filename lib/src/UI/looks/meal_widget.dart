@@ -11,7 +11,7 @@ class MealWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final dark = ref.watch(darkmodeNotifier);
     return Container(
-      margin: const EdgeInsets.fromLTRB(20.0, 10, 20.0, 10),
+      margin: const EdgeInsets.fromLTRB(16.0, 10, 16.0, 10),
       // padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
@@ -30,7 +30,7 @@ class MealWidget extends ConsumerWidget {
                 bottomRight: Radius.circular(0), // Flat bottom
               ),
               // color: (dark) ? Colors.white10 : Colors.white,
-              color: (dark) ? Colors.orange[800]! : Colors.deepOrangeAccent,
+              color: (dark) ? Colors.orange[700]! : Colors.deepOrange[400]!,
               // : Colors.black12
             ),
             child: Column(
@@ -51,7 +51,7 @@ class MealWidget extends ConsumerWidget {
                             (states) {
                               return (dark)
                                   ? Colors.blue[600]!
-                                  : Colors.blue[300]!;
+                                  : Colors.blue[400]!;
                             },
                           ),
                         ),

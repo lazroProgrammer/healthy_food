@@ -22,50 +22,51 @@ class Nutriments extends Table {
 
 //*verified 2/11/2024
 class SavedProducts extends Table {
-  TextColumn get barcode => text().unique()();
+  TextColumn get barcode => text()();
   TextColumn get name => text().nullable()();
   TextColumn get brand => text().nullable()();
   TextColumn get ingredients => text().named("ingredients")();
   TextColumn get quantity => text().nullable()();
   TextColumn get countries => text().nullable()();
   TextColumn get categories => text().nullable()();
-  IntColumn get novagrade => integer().nullable()();
-  IntColumn get nutriscore => integer().nullable()();
-  IntColumn get ecoscore => integer().nullable()();
+  IntColumn get novagrade => integer()();
+  IntColumn get nutriscore => integer()();
+  IntColumn get ecoscore => integer()();
   TextColumn get imageUrl => text().nullable()();
-  DateTimeColumn get createdAt => dateTime().nullable()();
+  DateTimeColumn get createdAt => dateTime()();
 
   @override
   Set<Column> get primaryKey => {barcode};
 }
 
-// class ProductAllergens extends Table {
-//   TextColumn get productBarcode => text().references(SavedProducts, #barcode)();
-//   IntColumn get allergenId => integer().references(Allergens, #id)();
-// }
+class ProductAllergens extends Table {
+  TextColumn get productBarcode => text().references(SavedProducts, #barcode)();
+  IntColumn get allergenId => integer().references(Allergens, #id)();
+}
 
-// class ProductAdditives extends Table {
-//   TextColumn get productBarcode => text().references(SavedProducts, #barcode)();
-//   IntColumn get additiveId => integer().references(Additives, #id)();
-// }
+class ProductAdditives extends Table {
+  TextColumn get productBarcode => text().references(SavedProducts, #barcode)();
+  IntColumn get additiveId => integer().references(Additives, #id)();
+}
 
-// class Allergens extends Table {
-//   IntColumn get id => integer().autoIncrement()();
-//   TextColumn get name => text().withLength(min: 1, max: 50)();
-// }
+class Allergens extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get name => text().withLength(min: 1, max: 50)();
+}
 
-// class Additives extends Table {
-//   IntColumn get id => integer().autoIncrement()();
-//   TextColumn get name => text().withLength(min: 1, max: 50)();
-// }
+class Additives extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get name => text().withLength(min: 1, max: 50)();
+}
 
 //*verified 2/11/2024
 class MealPeriods extends Table {
   IntColumn get id => integer().autoIncrement()();
 
   // Use customConstraint to limit values to meal group types
-  TextColumn get type => text().withLength(min: 1, max: 20).customConstraint(
-      "CHECK (type IN ('Breakfast','Brunch', 'Lunch', 'Dinner', 'Evening tea', 'snack'))")();
+  TextColumn get type => text().withLength(min: 1, max: 20)();
+//   .customConstraint(
+//       "CHECK (type IN ('Breakfast','Brunch', 'Lunch', 'Dinner', 'Evening tea', 'snack'))")();
   DateTimeColumn get startTime => dateTime()();
   DateTimeColumn get endTime => dateTime()();
 }
@@ -76,8 +77,9 @@ class Meal extends Table {
   DateTimeColumn get date => dateTime()();
 
   // Use customConstraint to define allowed meal types
-  TextColumn get type => text().withLength(min: 1, max: 20).customConstraint(
-      "CHECK (type IN ('Main dish', 'Side dish', 'Appetizer', 'Dessert', 'Drink'))")();
+  TextColumn get type => text().withLength(min: 1, max: 20)();
+//   .customConstraint(
+//       "CHECK (type IN ('Main dish', 'Side dish', 'Appetizer', 'Dessert', 'Drink'))")();
 }
 
 //*verified 2/11/2024
@@ -113,9 +115,14 @@ class MealPeriodsToSavedProducts extends Table {
   MealToProduct,
   MealPeriodsToMeal,
   MealPeriodsToSavedProducts,
-//   Additives,
-//   Allergens,
-//   ProductAllergens,
-//   ProductAdditives
+  Additives,
+  Allergens,
+  ProductAllergens,
+  ProductAdditives
 ])
-class AppDatabase extends _$AppDatabase {}
+class AppDatabase extends _$AppDatabase {
+  AppDatabase(super.e);
+
+  @override
+  int get schemaVersion => 1; // Set this to your database version
+}
