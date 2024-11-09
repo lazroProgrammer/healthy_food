@@ -16,7 +16,7 @@ class SideBar extends StatelessWidget {
           DrawerHeader(
             decoration: BoxDecoration(
                 // color: Theme.of(context).primaryColor,
-                color: Colors.deepOrange[500]),
+                color: Colors.orange[700]),
             child: Text(
               "Weclome!!",
               style: TextStyle(

@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:healthy_food/src/UI/looks/meal_widget.dart';
-import 'package:healthy_food/src/UI/pages/add_foods_page.dart';
+import 'package:healthy_food/src/UI/pages/add_meal.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class FoodTrackingPage extends StatefulWidget {
@@ -93,7 +93,7 @@ class _FoodTrackingPageState extends State<FoodTrackingPage> {
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => AddFoods()));
+                .push(MaterialPageRoute(builder: (context) => AddMealPage()));
           },
           child: Icon(Icons.post_add_sharp),
         ),

@@ -517,6 +517,20 @@ class ProductHandler {
               conversionRate: conversionRate(nutrient)));
         }
       }
+      if (nutrimentList.firstWhere((n) => n.label == "fat").label == "fat" &&
+          nutrimentList.firstWhere((n) => n.label == "satured fat").label ==
+              "satured fat") {
+        final fat = nutrimentList.firstWhere((n) => n.label == "fat");
+        final saturatedFat =
+            nutrimentList.firstWhere((n) => n.label == "satured fat");
+        nutrimentList.add(NutrimentHandler(
+            label: "non-saturated fats",
+            unit: fat.unit,
+            value: (double.parse(fat.value) - double.parse(saturatedFat.value))
+                .toString(),
+            isGood: true,
+            conversionRate: null));
+      }
     } else {
       print("No nutriments found for this product.");
     }
@@ -554,6 +568,20 @@ class ProductHandler {
               conversionRate: conversionRate(nutrient)));
         }
       }
+      // if (nutrimentList.firstWhere((n) => n.label == "fat").label == "fat" &&
+      //     nutrimentList.firstWhere((n) => n.label == "satured-fat").label ==
+      //         "satured-fat") {
+      //   final fat = nutrimentList.firstWhere((n) => n.label == "fat");
+      //   final saturatedFat =
+      //       nutrimentList.firstWhere((n) => n.label == "satured-fat");
+      //   nutrimentList.add(NutrimentHandler(
+      //       label: "non-saturated fats",
+      //       unit: fat.unit,
+      //       value: (double.parse(fat.value) - double.parse(saturatedFat.value))
+      //           .toString(),
+      //       isGood: true,
+      //       conversionRate: null));
+      // }
     }
 
     return nutrimentList;

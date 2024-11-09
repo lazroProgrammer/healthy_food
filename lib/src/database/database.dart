@@ -1,4 +1,9 @@
+import 'dart:io';
+
 import 'package:drift/drift.dart';
+import 'package:drift/native.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 
 part 'database.g.dart';
 
@@ -84,7 +89,7 @@ class Meal extends Table {
 
 //*verified 2/11/2024
 class MealToProduct extends Table {
-  TextColumn get barcode => text().references(SavedProducts, #barcode)();
+  TextColumn get productBarcode => text().references(SavedProducts, #barcode)();
   IntColumn get mealId => integer().references(Meal, #id)();
   TextColumn get unit => text().withLength(max: 5)();
   RealColumn get value => real()();
@@ -121,8 +126,16 @@ class MealPeriodsToSavedProducts extends Table {
   ProductAdditives
 ])
 class AppDatabase extends _$AppDatabase {
-  AppDatabase(super.e);
+  AppDatabase() : super(openConnection());
 
   @override
   int get schemaVersion => 1; // Set this to your database version
+}
+
+LazyDatabase openConnection() {
+  return LazyDatabase(() async {
+    final dbFolder = await getApplicationDocumentsDirectory();
+    final file = File(p.join(dbFolder.path, 'app_database.sqlite'));
+    return NativeDatabase(file);
+  });
 }

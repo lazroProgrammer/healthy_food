@@ -72,3 +72,5 @@ android/app/debug.keystore
 
 # Key files (adjust based on your key storage location)
 keys/
+
+*.g.dart

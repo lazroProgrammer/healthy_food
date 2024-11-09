@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:healthy_food/l10n/l10n.dart';
 import 'package:healthy_food/src/Notifiers/settings_notifier.dart';
-import 'package:healthy_food/src/UI/pages/home_page.dart';
+import 'package:healthy_food/src/UI/pages/main_page.dart';
 import 'package:healthy_food/src/UI/theme/light_theme.dart';
 import 'package:healthy_food/src/data%20classes/settings.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -54,7 +54,7 @@ class MainApp extends ConsumerWidget {
         theme: (dark)
             ? ThemeData.dark().copyWith(
                 appBarTheme: AppBarTheme(
-                  backgroundColor: Colors.deepOrange[500],
+                  backgroundColor: Colors.orange[800],
                   foregroundColor: Colors.white,
                 ),
               )
@@ -77,10 +77,6 @@ class MainApp extends ConsumerWidget {
           // If the device's locale is not supported, default to English
           return const Locale('en', '');
         },
-        // home: (designIndex >= 0)
-        //     ? FormalBubblesSearchPage(
-        //         designIndex: (dark) ? (2 * designIndex + 1) : (2 * designIndex))
-        // : const SafeArea(child: HomePage()));
-        home: const HomePage());
+        home: const MainPage());
   }
 }

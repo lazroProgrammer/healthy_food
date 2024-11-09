@@ -28,6 +28,8 @@ dependencies:
     sdk: flutter
   flutter_cache_manager: ^3.4.1
   table_calendar: ^3.1.2
+  path_provider: ^2.1.5
+  path: ^1.9.0
 
 dev_dependencies:
   drift_dev: ^2.21.2
