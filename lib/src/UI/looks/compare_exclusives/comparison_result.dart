@@ -27,8 +27,12 @@ class ComparisonResult extends ConsumerWidget {
     final dark = ref.watch(darkmodeNotifier);
     //! do not remove this condition
     return (item1 == null || item2 == null)
-        ? Center(
-            child: Text("Enter products to get results"),
+        ? Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              "Enter products to get results",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
           )
         : Container(
             margin: const EdgeInsets.fromLTRB(20.0, 0, 20.0, 0),

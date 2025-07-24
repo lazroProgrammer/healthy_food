@@ -50,30 +50,14 @@ class _ComparisonPageState extends ConsumerState<ComparisonPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           (item1 == null)
-                              ? ElevatedButton(
-                                  onPressed: () => Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              CompareScannerPage(
-                                                last: false,
-                                              ))),
-                                  child: Text(AppLocalizations.of(context)!
-                                      .barcode_scan))
+                              ? scanButton(context, false)
                               : FoodMiniCard(item: item1, last: false),
                           (item2 == null)
-                              ? ElevatedButton(
-                                  onPressed: () => Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              CompareScannerPage(
-                                                last: true,
-                                              ))),
-                                  child: Text(AppLocalizations.of(context)!
-                                      .barcode_scan))
+                              ? scanButton(context, true)
                               : FoodMiniCard(item: item2, last: true)
                         ],
                       ),
-                      ComparisonResult(item1: item1, item2: item2)
+                      ComparisonResult(item1: item1, item2: item2),
                     ],
                   ),
                 ),
@@ -81,4 +65,25 @@ class _ComparisonPageState extends ConsumerState<ComparisonPage> {
       ),
     );
   }
+}
+
+Widget scanButton(BuildContext context, bool last) {
+  return Container(
+    width: MediaQuery.of(context).size.width / 2 - 20,
+    height: MediaQuery.of(context).size.width / 2 - 20,
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(14), color: Colors.black12),
+    child: Center(
+      child: IconButton(
+        onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => CompareScannerPage(
+                  last: last,
+                ))),
+        icon: Icon(
+          Icons.barcode_reader,
+          color: Colors.blue,
+        ),
+      ),
+    ),
+  );
 }

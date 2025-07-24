@@ -105,6 +105,7 @@ class MealPeriodsToMeal extends Table {
 
 //*verified 2/11/2024
 class MealPeriodsToSavedProducts extends Table {
+  IntColumn get id => integer().autoIncrement()();
   IntColumn get idMealPeriod => integer().references(MealPeriods, #id)();
   TextColumn get productBarcode => text().references(SavedProducts, #barcode)();
   TextColumn get unit => text().withLength(max: 5)();
@@ -126,13 +127,23 @@ class MealPeriodsToSavedProducts extends Table {
   ProductAdditives
 ])
 class AppDatabase extends _$AppDatabase {
-  AppDatabase() : super(openConnection());
+  // Private constructor
+  AppDatabase._internal() : super(_openConnection());
+
+  // Singleton instance
+  static final AppDatabase _instance = AppDatabase._internal();
+
+  // Public factory constructor
+  factory AppDatabase() {
+    return _instance;
+  }
 
   @override
-  int get schemaVersion => 1; // Set this to your database version
+  int get schemaVersion => 1;
 }
 
-LazyDatabase openConnection() {
+// Database connection function using LazyDatabase
+LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'app_database.sqlite'));

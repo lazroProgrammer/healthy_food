@@ -138,6 +138,7 @@ class ProductHandler {
     try {
       ProductHandler p = ProductHandler();
 
+      // Fetch product data
       ProductResultV3 result = await OpenFoodAPIClient.getProductV3(
               ProductQueryConfiguration(barcode,
                   version: ProductQueryVersion.v3))
@@ -145,34 +146,44 @@ class ProductHandler {
         throw TimeoutException("Request to fetch product data timed out");
       });
 
-      p.barcode = result.product?.barcode;
-      p.productName = result.product?.productName;
-      p.ingredients = result.product?.ingredientsText;
-      p.packagingInfo = result.product?.packaging;
-      p.allergens = result.product?.allergens?.names;
-      p.nutriScore = result.product?.nutriscore;
+      // Validate if product exists
+      if (result.product == null) {
+        log.w('No product found for barcode: $barcode');
+        Fluttertoast.showToast(msg: "No product found for barcode: $barcode");
+        return null;
+      }
+
+      // Populate ProductHandler fields
+      p.barcode = result.product?.barcode ?? "";
+      p.productName = result.product?.productName ?? "Unknown product";
+      p.ingredients = result.product?.ingredientsText ?? "Not available";
+      p.packagingInfo = result.product?.packaging ?? "No packaging info";
+      p.allergens = result.product?.allergens?.names ?? [];
+      p.nutriScore = result.product?.nutriscore ?? "N/A";
       p.novaGroup = result.product?.novaGroup;
-      p.ecoScore = result.product?.ecoscoreGrade;
-      p.brand = result.product?.brands;
-      p.quantity = result.product?.quantity;
-      p.categories = result.product?.categories;
-      p.origins = result.product?.origins;
-      p.additives = result.product?.additives?.names;
-      p.labels = result.product?.labelsTags;
-      p.servingSize = result.product?.servingSize;
-      p.stores = result.product?.stores;
-      p.countries = result.product?.countries;
+      p.ecoScore = result.product?.ecoscoreGrade ?? "N/A";
+      p.brand = result.product?.brands ?? "No brand info";
+      p.quantity = result.product?.quantity ?? "No quantity info";
+      p.categories = result.product?.categories ?? "No categories info";
+      p.origins = result.product?.origins ?? "No origins info";
+      p.additives = result.product?.additives?.names ?? [];
+      p.labels = result.product?.labelsTags ?? [];
+      p.servingSize = result.product?.servingSize ?? "No serving size info";
+      p.stores = result.product?.stores ?? "No stores info";
+      p.countries = result.product?.countries ?? "No country info";
       p.imageUrl = result.product?.imageFrontUrl ?? "";
-      p.nutriments = getNutrimentsFromProduct(result.product!);
+      p.nutriments = result.product != null
+          ? getNutrimentsFromProduct(result.product!)
+          : [];
 
       return p;
     } on TimeoutException catch (_) {
       Fluttertoast.showToast(msg: "Request to fetch product data timed out");
       return null;
-    } catch (e) {
-      log.e('Error fetching product data: $e');
+    } catch (e, stacktrace) {
+      log.e('Error fetching product($barcode) data: $e');
+      log.e(stacktrace.toString());
       return null;
-      // throw Exception();
     }
   }
 
@@ -370,8 +381,9 @@ class ProductHandler {
     p.stores = product.stores;
     p.countries = product.countries;
     p.imageUrl = product.imageFrontUrl ?? "";
-    // p.nutriments = getNutrimentsFromProduct(product);
-    p.nutriments = getNonZeroNutrients(product);
+    p.nutriments =
+        product.nutriments != null ? getNutrimentsFromProduct(product) : [];
+    // p.nutriments = getNonZeroNutrients(product);
 
     return p;
   }
@@ -517,19 +529,33 @@ class ProductHandler {
               conversionRate: conversionRate(nutrient)));
         }
       }
-      if (nutrimentList.firstWhere((n) => n.label == "fat").label == "fat" &&
-          nutrimentList.firstWhere((n) => n.label == "satured fat").label ==
-              "satured fat") {
-        final fat = nutrimentList.firstWhere((n) => n.label == "fat");
-        final saturatedFat =
-            nutrimentList.firstWhere((n) => n.label == "satured fat");
+      final emptyHandler = NutrimentHandler(
+        label: "",
+        unit: "",
+        value: "0",
+        isGood: false,
+        conversionRate: null,
+      );
+
+      final fat = nutrimentList.firstWhere(
+        (n) => n.label == "Fat",
+        orElse: () => emptyHandler,
+      );
+
+      final saturatedFat = nutrimentList.firstWhere(
+        (n) => n.label == "Saturated Fat", // Corrected label
+        orElse: () => emptyHandler,
+      );
+
+      if (fat.label.isNotEmpty && saturatedFat.label.isNotEmpty) {
         nutrimentList.add(NutrimentHandler(
-            label: "non-saturated fats",
-            unit: fat.unit,
-            value: (double.parse(fat.value) - double.parse(saturatedFat.value))
-                .toString(),
-            isGood: true,
-            conversionRate: null));
+          label: "Non-saturated Fats",
+          unit: fat.unit,
+          value: (double.parse(fat.value) - double.parse(saturatedFat.value))
+              .toStringAsFixed(2),
+          isGood: true,
+          conversionRate: null,
+        ));
       }
     } else {
       print("No nutriments found for this product.");
@@ -860,7 +886,9 @@ class ProductHandler {
 
       case 'saturated fat':
         return getGradientColor(value, 1.5, 5.0, Colors.green, Colors.red);
-
+      case 'non-saturated fats':
+        return getGradientColor(
+            value, 0, 10.0, Colors.grey[400]!, Colors.green[900]!);
       case 'sugars':
       case 'carbohydrates':
         return getGradientColor(value, 5.0, 22.5, Colors.green, Colors.red);
@@ -896,12 +924,13 @@ class ProductHandler {
     final Color orange = (dark) ? Colors.orange[700]! : Colors.orange;
 
     switch (nutrientType.toLowerCase()) {
-      case 'fat':
-        return getGradientColor(value, 3.0, 17.5, green, red, yellow, orange);
+      // case 'fat':
+      //   return getGradientColor(value, 3.0, 17.5, green, red, yellow, orange);
 
       case 'saturated fat':
         return getGradientColor(value, 1.5, 5.0, green, red, yellow, orange);
-
+      case 'non-saturated fats':
+        return getGradientColor(value, 0, 5.0, grey, green);
       case 'carbohydrates':
       case 'sugars':
         return getGradientColor(value, 5.0, 22.5, green, red, yellow, orange);

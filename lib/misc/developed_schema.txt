@@ -1,0 +1,19 @@
+NutrientTypes (id, name, unit)
+Nutriments (id, nutrientTypeId, value, barcode)  -- Links to NutrientTypes
+
+SavedProducts (barcode, name, brand, quantity, countries, novagrade, nutriscore, ecoscore, imageUrl)
+ProductAllergens (productBarcode, allergenId)  -- Links SavedProducts and Allergens
+ProductAdditives (productBarcode, additiveId)  -- Links SavedProducts and Additives
+
+Allergens (id, name)
+Additives (id, name)
+
+MealTypes (id, type)
+Meal (id, date, typeId, groupId)  -- Links to MealTypes and MealGroup
+MealGroup (id, typeId, date)  -- Links to MealTypes
+
+Meal_To_Product (barcode, mealId, quantity)  -- Links SavedProducts and Meal
+
+
+<<!!!!!!Ingredients (id, name, productBarcode)  -- Links each ingredient to a product!!!!!!>>
+

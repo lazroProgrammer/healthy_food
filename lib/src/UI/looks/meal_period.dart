@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:healthy_food/src/Notifiers/settings_notifier.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class MealPeriodWidget extends ConsumerWidget {
-  const MealPeriodWidget(
+class MealPeriodPrototype extends ConsumerWidget {
+  const MealPeriodPrototype(
       {super.key, required this.title, required this.subTitle});
   final String title;
   final String subTitle;

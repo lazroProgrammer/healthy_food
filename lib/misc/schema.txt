@@ -1,0 +1,5 @@
+nutriments(id,name,unit,value, #barcode)
+savedProducts(barcode,name,brand,quantity,ingredient,countries,novagrade,nutriscore,ecoscore,imageUrl, allergens,additives) ### allergens and additives may fall into their proper tables or maybe they will be enums
+meal(id,date,type,#groupId)
+mealGroup(id,type,date)
+meal_To_Product(#barcode,#idMeal,quantity)

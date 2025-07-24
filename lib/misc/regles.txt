@@ -1,0 +1,4 @@
+- everyday, you can have 1 dinner & 1 lunch & 1 breakfast.
+ and evening tea, for snacks just add them with their time shown in a snacks section i guess.
+- each period of meals (except evening tea and snacks) has a group of: main dishes, side dishes, appetizers, desserts, drinks
+- 

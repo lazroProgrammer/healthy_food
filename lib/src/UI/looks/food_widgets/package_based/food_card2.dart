@@ -9,6 +9,8 @@ import 'package:healthy_food/src/UI/looks/skelton.dart';
 import 'package:healthy_food/src/data%20classes/open_food_pub/product.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+const double size = 150;
+
 class FoodCard2 extends ConsumerStatefulWidget {
   final ProductHandler item;
   const FoodCard2({required this.item, super.key});
@@ -57,23 +59,58 @@ class _FoodCardState extends ConsumerState<FoodCard2> {
           borderRadius: BorderRadius.circular(20.0)),
       child: Column(
         children: [
-          Container(
-            margin: const EdgeInsets.all(10),
-            // decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
-            child: (widget.item.imageUrl != "")
-                ? Container(
-                    width: 130,
-                    height: 130,
-                    decoration: BoxDecoration(
-                        color: Colors.teal[100],
-                        borderRadius: BorderRadius.circular(20)),
-                    child: (dataSaver)
-                        ? DataSaverImg(imageUrl: widget.item.imageUrl)
-                        : CachedImg(imageUrl: widget.item.imageUrl),
-                  )
-                : Skelton(
-                    width: MediaQuery.of(context).size.width - 70,
-                    height: MediaQuery.of(context).size.height - 70),
+          SizedBox(
+            width: MediaQuery.of(context).size.width - 50,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  // decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+                  child: (widget.item.imageUrl != "")
+                      ? Container(
+                          width: size,
+                          height: size,
+                          decoration: BoxDecoration(
+                              // color: Colors.teal[100],
+                              borderRadius: BorderRadius.circular(20)),
+                          child: (dataSaver)
+                              ? DataSaverImg(
+                                  imageUrl: widget.item.imageUrl,
+                                  size: size,
+                                )
+                              : CachedImg(
+                                  imageUrl: widget.item.imageUrl,
+                                  size: size,
+                                ),
+                        )
+                      : Skelton(width: size, height: size),
+                ),
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.item.productName ?? "unknown",
+                          softWrap: true,
+                          overflow: TextOverflow.clip,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        Container(
+                            margin: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                            child: Text(AppLocalizations.of(context)!
+                                .brandPut(widget.item.brand ?? "unknown"))),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
           const SizedBox(width: 16),
           Container(
@@ -82,24 +119,11 @@ class _FoodCardState extends ConsumerState<FoodCard2> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.item.productName ?? "unknown",
-                  softWrap: true,
-                  overflow: TextOverflow.clip,
-                  style: const TextStyle(
-                    fontSize: 26,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                Container(
-                    margin: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                    child: Text(AppLocalizations.of(context)!
-                        .brandPut(widget.item.brand ?? "unknown"))),
-                Text(
                   "Categories:",
                   style: const TextStyle(
                       fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                Text("Categories: ${widget.item.categories ?? "unknown"}"),
+                Text(widget.item.categories ?? "unknown"),
                 Text(
                   AppLocalizations.of(context)!.ingredients,
                   style: const TextStyle(

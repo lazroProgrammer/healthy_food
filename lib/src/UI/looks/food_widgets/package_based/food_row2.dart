@@ -59,9 +59,16 @@ class _FoodRowState extends ConsumerState<FoodRow2> {
         children: [
           Row(
             children: [
-              (dataSaver)
-                  ? DataSaverImg(imageUrl: widget.item.imageUrl)
-                  : CachedImg(imageUrl: widget.item.imageUrl),
+              Column(
+                children: [
+                  (dataSaver)
+                      ? DataSaverImg(imageUrl: widget.item.imageUrl)
+                      : CachedImg(imageUrl: widget.item.imageUrl),
+                  SizedBox(
+                    height: 20,
+                  ),
+                ],
+              ),
               const SizedBox(width: 16),
               Expanded(
                   child: Column(

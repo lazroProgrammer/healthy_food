@@ -1627,11 +1627,11 @@ class $MealToProductTable extends MealToProduct
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $MealToProductTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _barcodeMeta =
-      const VerificationMeta('barcode');
+  static const VerificationMeta _productBarcodeMeta =
+      const VerificationMeta('productBarcode');
   @override
-  late final GeneratedColumn<String> barcode = GeneratedColumn<String>(
-      'barcode', aliasedName, false,
+  late final GeneratedColumn<String> productBarcode = GeneratedColumn<String>(
+      'product_barcode', aliasedName, false,
       type: DriftSqlType.string,
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
@@ -1657,7 +1657,7 @@ class $MealToProductTable extends MealToProduct
       'value', aliasedName, false,
       type: DriftSqlType.double, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [barcode, mealId, unit, value];
+  List<GeneratedColumn> get $columns => [productBarcode, mealId, unit, value];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1668,11 +1668,13 @@ class $MealToProductTable extends MealToProduct
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('barcode')) {
-      context.handle(_barcodeMeta,
-          barcode.isAcceptableOrUnknown(data['barcode']!, _barcodeMeta));
+    if (data.containsKey('product_barcode')) {
+      context.handle(
+          _productBarcodeMeta,
+          productBarcode.isAcceptableOrUnknown(
+              data['product_barcode']!, _productBarcodeMeta));
     } else if (isInserting) {
-      context.missing(_barcodeMeta);
+      context.missing(_productBarcodeMeta);
     }
     if (data.containsKey('meal_id')) {
       context.handle(_mealIdMeta,
@@ -1701,8 +1703,8 @@ class $MealToProductTable extends MealToProduct
   MealToProductData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return MealToProductData(
-      barcode: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}barcode'])!,
+      productBarcode: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}product_barcode'])!,
       mealId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}meal_id'])!,
       unit: attachedDatabase.typeMapping
@@ -1720,19 +1722,19 @@ class $MealToProductTable extends MealToProduct
 
 class MealToProductData extends DataClass
     implements Insertable<MealToProductData> {
-  final String barcode;
+  final String productBarcode;
   final int mealId;
   final String unit;
   final double value;
   const MealToProductData(
-      {required this.barcode,
+      {required this.productBarcode,
       required this.mealId,
       required this.unit,
       required this.value});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['barcode'] = Variable<String>(barcode);
+    map['product_barcode'] = Variable<String>(productBarcode);
     map['meal_id'] = Variable<int>(mealId);
     map['unit'] = Variable<String>(unit);
     map['value'] = Variable<double>(value);
@@ -1741,7 +1743,7 @@ class MealToProductData extends DataClass
 
   MealToProductCompanion toCompanion(bool nullToAbsent) {
     return MealToProductCompanion(
-      barcode: Value(barcode),
+      productBarcode: Value(productBarcode),
       mealId: Value(mealId),
       unit: Value(unit),
       value: Value(value),
@@ -1752,7 +1754,7 @@ class MealToProductData extends DataClass
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return MealToProductData(
-      barcode: serializer.fromJson<String>(json['barcode']),
+      productBarcode: serializer.fromJson<String>(json['productBarcode']),
       mealId: serializer.fromJson<int>(json['mealId']),
       unit: serializer.fromJson<String>(json['unit']),
       value: serializer.fromJson<double>(json['value']),
@@ -1762,7 +1764,7 @@ class MealToProductData extends DataClass
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'barcode': serializer.toJson<String>(barcode),
+      'productBarcode': serializer.toJson<String>(productBarcode),
       'mealId': serializer.toJson<int>(mealId),
       'unit': serializer.toJson<String>(unit),
       'value': serializer.toJson<double>(value),
@@ -1770,16 +1772,18 @@ class MealToProductData extends DataClass
   }
 
   MealToProductData copyWith(
-          {String? barcode, int? mealId, String? unit, double? value}) =>
+          {String? productBarcode, int? mealId, String? unit, double? value}) =>
       MealToProductData(
-        barcode: barcode ?? this.barcode,
+        productBarcode: productBarcode ?? this.productBarcode,
         mealId: mealId ?? this.mealId,
         unit: unit ?? this.unit,
         value: value ?? this.value,
       );
   MealToProductData copyWithCompanion(MealToProductCompanion data) {
     return MealToProductData(
-      barcode: data.barcode.present ? data.barcode.value : this.barcode,
+      productBarcode: data.productBarcode.present
+          ? data.productBarcode.value
+          : this.productBarcode,
       mealId: data.mealId.present ? data.mealId.value : this.mealId,
       unit: data.unit.present ? data.unit.value : this.unit,
       value: data.value.present ? data.value.value : this.value,
@@ -1789,7 +1793,7 @@ class MealToProductData extends DataClass
   @override
   String toString() {
     return (StringBuffer('MealToProductData(')
-          ..write('barcode: $barcode, ')
+          ..write('productBarcode: $productBarcode, ')
           ..write('mealId: $mealId, ')
           ..write('unit: $unit, ')
           ..write('value: $value')
@@ -1798,49 +1802,49 @@ class MealToProductData extends DataClass
   }
 
   @override
-  int get hashCode => Object.hash(barcode, mealId, unit, value);
+  int get hashCode => Object.hash(productBarcode, mealId, unit, value);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is MealToProductData &&
-          other.barcode == this.barcode &&
+          other.productBarcode == this.productBarcode &&
           other.mealId == this.mealId &&
           other.unit == this.unit &&
           other.value == this.value);
 }
 
 class MealToProductCompanion extends UpdateCompanion<MealToProductData> {
-  final Value<String> barcode;
+  final Value<String> productBarcode;
   final Value<int> mealId;
   final Value<String> unit;
   final Value<double> value;
   final Value<int> rowid;
   const MealToProductCompanion({
-    this.barcode = const Value.absent(),
+    this.productBarcode = const Value.absent(),
     this.mealId = const Value.absent(),
     this.unit = const Value.absent(),
     this.value = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   MealToProductCompanion.insert({
-    required String barcode,
+    required String productBarcode,
     required int mealId,
     required String unit,
     required double value,
     this.rowid = const Value.absent(),
-  })  : barcode = Value(barcode),
+  })  : productBarcode = Value(productBarcode),
         mealId = Value(mealId),
         unit = Value(unit),
         value = Value(value);
   static Insertable<MealToProductData> custom({
-    Expression<String>? barcode,
+    Expression<String>? productBarcode,
     Expression<int>? mealId,
     Expression<String>? unit,
     Expression<double>? value,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
-      if (barcode != null) 'barcode': barcode,
+      if (productBarcode != null) 'product_barcode': productBarcode,
       if (mealId != null) 'meal_id': mealId,
       if (unit != null) 'unit': unit,
       if (value != null) 'value': value,
@@ -1849,13 +1853,13 @@ class MealToProductCompanion extends UpdateCompanion<MealToProductData> {
   }
 
   MealToProductCompanion copyWith(
-      {Value<String>? barcode,
+      {Value<String>? productBarcode,
       Value<int>? mealId,
       Value<String>? unit,
       Value<double>? value,
       Value<int>? rowid}) {
     return MealToProductCompanion(
-      barcode: barcode ?? this.barcode,
+      productBarcode: productBarcode ?? this.productBarcode,
       mealId: mealId ?? this.mealId,
       unit: unit ?? this.unit,
       value: value ?? this.value,
@@ -1866,8 +1870,8 @@ class MealToProductCompanion extends UpdateCompanion<MealToProductData> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (barcode.present) {
-      map['barcode'] = Variable<String>(barcode.value);
+    if (productBarcode.present) {
+      map['product_barcode'] = Variable<String>(productBarcode.value);
     }
     if (mealId.present) {
       map['meal_id'] = Variable<int>(mealId.value);
@@ -1887,7 +1891,7 @@ class MealToProductCompanion extends UpdateCompanion<MealToProductData> {
   @override
   String toString() {
     return (StringBuffer('MealToProductCompanion(')
-          ..write('barcode: $barcode, ')
+          ..write('productBarcode: $productBarcode, ')
           ..write('mealId: $mealId, ')
           ..write('unit: $unit, ')
           ..write('value: $value, ')
@@ -2186,6 +2190,15 @@ class $MealPeriodsToSavedProductsTable extends MealPeriodsToSavedProducts
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $MealPeriodsToSavedProductsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
   static const VerificationMeta _idMealPeriodMeta =
       const VerificationMeta('idMealPeriod');
   @override
@@ -2218,7 +2231,7 @@ class $MealPeriodsToSavedProductsTable extends MealPeriodsToSavedProducts
       type: DriftSqlType.double, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [idMealPeriod, productBarcode, unit, value];
+      [id, idMealPeriod, productBarcode, unit, value];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -2230,6 +2243,9 @@ class $MealPeriodsToSavedProductsTable extends MealPeriodsToSavedProducts
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
     if (data.containsKey('id_meal_period')) {
       context.handle(
           _idMealPeriodMeta,
@@ -2262,12 +2278,14 @@ class $MealPeriodsToSavedProductsTable extends MealPeriodsToSavedProducts
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => const {};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   MealPeriodsToSavedProduct map(Map<String, dynamic> data,
       {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return MealPeriodsToSavedProduct(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       idMealPeriod: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id_meal_period'])!,
       productBarcode: attachedDatabase.typeMapping.read(
@@ -2287,18 +2305,21 @@ class $MealPeriodsToSavedProductsTable extends MealPeriodsToSavedProducts
 
 class MealPeriodsToSavedProduct extends DataClass
     implements Insertable<MealPeriodsToSavedProduct> {
+  final int id;
   final int idMealPeriod;
   final String productBarcode;
   final String unit;
   final double value;
   const MealPeriodsToSavedProduct(
-      {required this.idMealPeriod,
+      {required this.id,
+      required this.idMealPeriod,
       required this.productBarcode,
       required this.unit,
       required this.value});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
     map['id_meal_period'] = Variable<int>(idMealPeriod);
     map['product_barcode'] = Variable<String>(productBarcode);
     map['unit'] = Variable<String>(unit);
@@ -2308,6 +2329,7 @@ class MealPeriodsToSavedProduct extends DataClass
 
   MealPeriodsToSavedProductsCompanion toCompanion(bool nullToAbsent) {
     return MealPeriodsToSavedProductsCompanion(
+      id: Value(id),
       idMealPeriod: Value(idMealPeriod),
       productBarcode: Value(productBarcode),
       unit: Value(unit),
@@ -2319,6 +2341,7 @@ class MealPeriodsToSavedProduct extends DataClass
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return MealPeriodsToSavedProduct(
+      id: serializer.fromJson<int>(json['id']),
       idMealPeriod: serializer.fromJson<int>(json['idMealPeriod']),
       productBarcode: serializer.fromJson<String>(json['productBarcode']),
       unit: serializer.fromJson<String>(json['unit']),
@@ -2329,6 +2352,7 @@ class MealPeriodsToSavedProduct extends DataClass
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
       'idMealPeriod': serializer.toJson<int>(idMealPeriod),
       'productBarcode': serializer.toJson<String>(productBarcode),
       'unit': serializer.toJson<String>(unit),
@@ -2337,11 +2361,13 @@ class MealPeriodsToSavedProduct extends DataClass
   }
 
   MealPeriodsToSavedProduct copyWith(
-          {int? idMealPeriod,
+          {int? id,
+          int? idMealPeriod,
           String? productBarcode,
           String? unit,
           double? value}) =>
       MealPeriodsToSavedProduct(
+        id: id ?? this.id,
         idMealPeriod: idMealPeriod ?? this.idMealPeriod,
         productBarcode: productBarcode ?? this.productBarcode,
         unit: unit ?? this.unit,
@@ -2350,6 +2376,7 @@ class MealPeriodsToSavedProduct extends DataClass
   MealPeriodsToSavedProduct copyWithCompanion(
       MealPeriodsToSavedProductsCompanion data) {
     return MealPeriodsToSavedProduct(
+      id: data.id.present ? data.id.value : this.id,
       idMealPeriod: data.idMealPeriod.present
           ? data.idMealPeriod.value
           : this.idMealPeriod,
@@ -2364,6 +2391,7 @@ class MealPeriodsToSavedProduct extends DataClass
   @override
   String toString() {
     return (StringBuffer('MealPeriodsToSavedProduct(')
+          ..write('id: $id, ')
           ..write('idMealPeriod: $idMealPeriod, ')
           ..write('productBarcode: $productBarcode, ')
           ..write('unit: $unit, ')
@@ -2373,11 +2401,13 @@ class MealPeriodsToSavedProduct extends DataClass
   }
 
   @override
-  int get hashCode => Object.hash(idMealPeriod, productBarcode, unit, value);
+  int get hashCode =>
+      Object.hash(id, idMealPeriod, productBarcode, unit, value);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is MealPeriodsToSavedProduct &&
+          other.id == this.id &&
           other.idMealPeriod == this.idMealPeriod &&
           other.productBarcode == this.productBarcode &&
           other.unit == this.unit &&
@@ -2386,62 +2416,65 @@ class MealPeriodsToSavedProduct extends DataClass
 
 class MealPeriodsToSavedProductsCompanion
     extends UpdateCompanion<MealPeriodsToSavedProduct> {
+  final Value<int> id;
   final Value<int> idMealPeriod;
   final Value<String> productBarcode;
   final Value<String> unit;
   final Value<double> value;
-  final Value<int> rowid;
   const MealPeriodsToSavedProductsCompanion({
+    this.id = const Value.absent(),
     this.idMealPeriod = const Value.absent(),
     this.productBarcode = const Value.absent(),
     this.unit = const Value.absent(),
     this.value = const Value.absent(),
-    this.rowid = const Value.absent(),
   });
   MealPeriodsToSavedProductsCompanion.insert({
+    this.id = const Value.absent(),
     required int idMealPeriod,
     required String productBarcode,
     required String unit,
     required double value,
-    this.rowid = const Value.absent(),
   })  : idMealPeriod = Value(idMealPeriod),
         productBarcode = Value(productBarcode),
         unit = Value(unit),
         value = Value(value);
   static Insertable<MealPeriodsToSavedProduct> custom({
+    Expression<int>? id,
     Expression<int>? idMealPeriod,
     Expression<String>? productBarcode,
     Expression<String>? unit,
     Expression<double>? value,
-    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
+      if (id != null) 'id': id,
       if (idMealPeriod != null) 'id_meal_period': idMealPeriod,
       if (productBarcode != null) 'product_barcode': productBarcode,
       if (unit != null) 'unit': unit,
       if (value != null) 'value': value,
-      if (rowid != null) 'rowid': rowid,
     });
   }
 
   MealPeriodsToSavedProductsCompanion copyWith(
-      {Value<int>? idMealPeriod,
+      {Value<int>? id,
+      Value<int>? idMealPeriod,
       Value<String>? productBarcode,
       Value<String>? unit,
-      Value<double>? value,
-      Value<int>? rowid}) {
+      Value<double>? value}) {
     return MealPeriodsToSavedProductsCompanion(
+      id: id ?? this.id,
       idMealPeriod: idMealPeriod ?? this.idMealPeriod,
       productBarcode: productBarcode ?? this.productBarcode,
       unit: unit ?? this.unit,
       value: value ?? this.value,
-      rowid: rowid ?? this.rowid,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
     if (idMealPeriod.present) {
       map['id_meal_period'] = Variable<int>(idMealPeriod.value);
     }
@@ -2454,20 +2487,17 @@ class MealPeriodsToSavedProductsCompanion
     if (value.present) {
       map['value'] = Variable<double>(value.value);
     }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
     return map;
   }
 
   @override
   String toString() {
     return (StringBuffer('MealPeriodsToSavedProductsCompanion(')
+          ..write('id: $id, ')
           ..write('idMealPeriod: $idMealPeriod, ')
           ..write('productBarcode: $productBarcode, ')
           ..write('unit: $unit, ')
-          ..write('value: $value, ')
-          ..write('rowid: $rowid')
+          ..write('value: $value')
           ..write(')'))
         .toString();
   }
@@ -3581,11 +3611,11 @@ final class $$SavedProductsTableReferences
       _mealToProductRefsTable(_$AppDatabase db) =>
           MultiTypedResultKey.fromTable(db.mealToProduct,
               aliasName: $_aliasNameGenerator(
-                  db.savedProducts.barcode, db.mealToProduct.barcode));
+                  db.savedProducts.barcode, db.mealToProduct.productBarcode));
 
   $$MealToProductTableProcessedTableManager get mealToProductRefs {
     final manager = $$MealToProductTableTableManager($_db, $_db.mealToProduct)
-        .filter((f) => f.barcode.barcode($_item.barcode));
+        .filter((f) => f.productBarcode.barcode($_item.barcode));
 
     final cache = $_typedResult.readTableOrNull(_mealToProductRefsTable($_db));
     return ProcessedTableManager(
@@ -3718,7 +3748,7 @@ class $$SavedProductsTableFilterComposer
         composer: this,
         getCurrentColumn: (t) => t.barcode,
         referencedTable: $db.mealToProduct,
-        getReferencedColumn: (t) => t.barcode,
+        getReferencedColumn: (t) => t.productBarcode,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -3918,7 +3948,7 @@ class $$SavedProductsTableAnnotationComposer
         composer: this,
         getCurrentColumn: (t) => t.barcode,
         referencedTable: $db.mealToProduct,
-        getReferencedColumn: (t) => t.barcode,
+        getReferencedColumn: (t) => t.productBarcode,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -4134,7 +4164,7 @@ class $$SavedProductsTableTableManager extends RootTableManager<
                                 .mealToProductRefs,
                         referencedItemsForCurrentItem:
                             (item, referencedItems) => referencedItems
-                                .where((e) => e.barcode == item.barcode),
+                                .where((e) => e.productBarcode == item.barcode),
                         typedResults: items),
                   if (mealPeriodsToSavedProductsRefs)
                     await $_getPrefetchedData(
@@ -5141,7 +5171,7 @@ typedef $$MealPeriodsTableProcessedTableManager = ProcessedTableManager<
         {bool mealPeriodsToMealRefs, bool mealPeriodsToSavedProductsRefs})>;
 typedef $$MealToProductTableCreateCompanionBuilder = MealToProductCompanion
     Function({
-  required String barcode,
+  required String productBarcode,
   required int mealId,
   required String unit,
   required double value,
@@ -5149,7 +5179,7 @@ typedef $$MealToProductTableCreateCompanionBuilder = MealToProductCompanion
 });
 typedef $$MealToProductTableUpdateCompanionBuilder = MealToProductCompanion
     Function({
-  Value<String> barcode,
+  Value<String> productBarcode,
   Value<int> mealId,
   Value<String> unit,
   Value<double> value,
@@ -5161,15 +5191,15 @@ final class $$MealToProductTableReferences extends BaseReferences<_$AppDatabase,
   $$MealToProductTableReferences(
       super.$_db, super.$_table, super.$_typedResult);
 
-  static $SavedProductsTable _barcodeTable(_$AppDatabase db) =>
+  static $SavedProductsTable _productBarcodeTable(_$AppDatabase db) =>
       db.savedProducts.createAlias($_aliasNameGenerator(
-          db.mealToProduct.barcode, db.savedProducts.barcode));
+          db.mealToProduct.productBarcode, db.savedProducts.barcode));
 
-  $$SavedProductsTableProcessedTableManager? get barcode {
-    if ($_item.barcode == null) return null;
+  $$SavedProductsTableProcessedTableManager? get productBarcode {
+    if ($_item.productBarcode == null) return null;
     final manager = $$SavedProductsTableTableManager($_db, $_db.savedProducts)
-        .filter((f) => f.barcode($_item.barcode!));
-    final item = $_typedResult.readTableOrNull(_barcodeTable($_db));
+        .filter((f) => f.barcode($_item.productBarcode!));
+    final item = $_typedResult.readTableOrNull(_productBarcodeTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: [item]));
@@ -5204,10 +5234,10 @@ class $$MealToProductTableFilterComposer
   ColumnFilters<double> get value => $composableBuilder(
       column: $table.value, builder: (column) => ColumnFilters(column));
 
-  $$SavedProductsTableFilterComposer get barcode {
+  $$SavedProductsTableFilterComposer get productBarcode {
     final $$SavedProductsTableFilterComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.barcode,
+        getCurrentColumn: (t) => t.productBarcode,
         referencedTable: $db.savedProducts,
         getReferencedColumn: (t) => t.barcode,
         builder: (joinBuilder,
@@ -5260,10 +5290,10 @@ class $$MealToProductTableOrderingComposer
   ColumnOrderings<double> get value => $composableBuilder(
       column: $table.value, builder: (column) => ColumnOrderings(column));
 
-  $$SavedProductsTableOrderingComposer get barcode {
+  $$SavedProductsTableOrderingComposer get productBarcode {
     final $$SavedProductsTableOrderingComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.barcode,
+        getCurrentColumn: (t) => t.productBarcode,
         referencedTable: $db.savedProducts,
         getReferencedColumn: (t) => t.barcode,
         builder: (joinBuilder,
@@ -5316,10 +5346,10 @@ class $$MealToProductTableAnnotationComposer
   GeneratedColumn<double> get value =>
       $composableBuilder(column: $table.value, builder: (column) => column);
 
-  $$SavedProductsTableAnnotationComposer get barcode {
+  $$SavedProductsTableAnnotationComposer get productBarcode {
     final $$SavedProductsTableAnnotationComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.barcode,
+        getCurrentColumn: (t) => t.productBarcode,
         referencedTable: $db.savedProducts,
         getReferencedColumn: (t) => t.barcode,
         builder: (joinBuilder,
@@ -5368,7 +5398,7 @@ class $$MealToProductTableTableManager extends RootTableManager<
     $$MealToProductTableUpdateCompanionBuilder,
     (MealToProductData, $$MealToProductTableReferences),
     MealToProductData,
-    PrefetchHooks Function({bool barcode, bool mealId})> {
+    PrefetchHooks Function({bool productBarcode, bool mealId})> {
   $$MealToProductTableTableManager(_$AppDatabase db, $MealToProductTable table)
       : super(TableManagerState(
           db: db,
@@ -5380,28 +5410,28 @@ class $$MealToProductTableTableManager extends RootTableManager<
           createComputedFieldComposer: () =>
               $$MealToProductTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
-            Value<String> barcode = const Value.absent(),
+            Value<String> productBarcode = const Value.absent(),
             Value<int> mealId = const Value.absent(),
             Value<String> unit = const Value.absent(),
             Value<double> value = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               MealToProductCompanion(
-            barcode: barcode,
+            productBarcode: productBarcode,
             mealId: mealId,
             unit: unit,
             value: value,
             rowid: rowid,
           ),
           createCompanionCallback: ({
-            required String barcode,
+            required String productBarcode,
             required int mealId,
             required String unit,
             required double value,
             Value<int> rowid = const Value.absent(),
           }) =>
               MealToProductCompanion.insert(
-            barcode: barcode,
+            productBarcode: productBarcode,
             mealId: mealId,
             unit: unit,
             value: value,
@@ -5413,7 +5443,7 @@ class $$MealToProductTableTableManager extends RootTableManager<
                     $$MealToProductTableReferences(db, table, e)
                   ))
               .toList(),
-          prefetchHooksCallback: ({barcode = false, mealId = false}) {
+          prefetchHooksCallback: ({productBarcode = false, mealId = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
@@ -5430,14 +5460,14 @@ class $$MealToProductTableTableManager extends RootTableManager<
                       dynamic,
                       dynamic,
                       dynamic>>(state) {
-                if (barcode) {
+                if (productBarcode) {
                   state = state.withJoin(
                     currentTable: table,
-                    currentColumn: table.barcode,
+                    currentColumn: table.productBarcode,
                     referencedTable:
-                        $$MealToProductTableReferences._barcodeTable(db),
+                        $$MealToProductTableReferences._productBarcodeTable(db),
                     referencedColumn: $$MealToProductTableReferences
-                        ._barcodeTable(db)
+                        ._productBarcodeTable(db)
                         .barcode,
                   ) as T;
                 }
@@ -5473,7 +5503,7 @@ typedef $$MealToProductTableProcessedTableManager = ProcessedTableManager<
     $$MealToProductTableUpdateCompanionBuilder,
     (MealToProductData, $$MealToProductTableReferences),
     MealToProductData,
-    PrefetchHooks Function({bool barcode, bool mealId})>;
+    PrefetchHooks Function({bool productBarcode, bool mealId})>;
 typedef $$MealPeriodsToMealTableCreateCompanionBuilder
     = MealPeriodsToMealCompanion Function({
   required int idMealPeriod,
@@ -5813,19 +5843,19 @@ typedef $$MealPeriodsToMealTableProcessedTableManager = ProcessedTableManager<
     PrefetchHooks Function({bool idMealPeriod, bool idMeal})>;
 typedef $$MealPeriodsToSavedProductsTableCreateCompanionBuilder
     = MealPeriodsToSavedProductsCompanion Function({
+  Value<int> id,
   required int idMealPeriod,
   required String productBarcode,
   required String unit,
   required double value,
-  Value<int> rowid,
 });
 typedef $$MealPeriodsToSavedProductsTableUpdateCompanionBuilder
     = MealPeriodsToSavedProductsCompanion Function({
+  Value<int> id,
   Value<int> idMealPeriod,
   Value<String> productBarcode,
   Value<String> unit,
   Value<double> value,
-  Value<int> rowid,
 });
 
 final class $$MealPeriodsToSavedProductsTableReferences extends BaseReferences<
@@ -5874,6 +5904,9 @@ class $$MealPeriodsToSavedProductsTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
   ColumnFilters<String> get unit => $composableBuilder(
       column: $table.unit, builder: (column) => ColumnFilters(column));
 
@@ -5930,6 +5963,9 @@ class $$MealPeriodsToSavedProductsTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<String> get unit => $composableBuilder(
       column: $table.unit, builder: (column) => ColumnOrderings(column));
 
@@ -5986,6 +6022,9 @@ class $$MealPeriodsToSavedProductsTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
   GeneratedColumn<String> get unit =>
       $composableBuilder(column: $table.unit, builder: (column) => column);
 
@@ -6060,32 +6099,32 @@ class $$MealPeriodsToSavedProductsTableTableManager extends RootTableManager<
               $$MealPeriodsToSavedProductsTableAnnotationComposer(
                   $db: db, $table: table),
           updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
             Value<int> idMealPeriod = const Value.absent(),
             Value<String> productBarcode = const Value.absent(),
             Value<String> unit = const Value.absent(),
             Value<double> value = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
           }) =>
               MealPeriodsToSavedProductsCompanion(
+            id: id,
             idMealPeriod: idMealPeriod,
             productBarcode: productBarcode,
             unit: unit,
             value: value,
-            rowid: rowid,
           ),
           createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
             required int idMealPeriod,
             required String productBarcode,
             required String unit,
             required double value,
-            Value<int> rowid = const Value.absent(),
           }) =>
               MealPeriodsToSavedProductsCompanion.insert(
+            id: id,
             idMealPeriod: idMealPeriod,
             productBarcode: productBarcode,
             unit: unit,
             value: value,
-            rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (

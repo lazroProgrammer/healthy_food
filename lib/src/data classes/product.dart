@@ -292,6 +292,7 @@ class Product {
         .map((productJson) => Product.fromJson(productJson))
         .toList();
   }
+
   // ! this may be garbage
   // static Future<List<Product>> startFetching({required List<String> categories,
   //   required int limit,
@@ -302,7 +303,6 @@ class Product {
   //   ,onCancel: () {
   //       log.i("Operation canceled");
   //     },).then();
-
   // }
   static Future<void> cancelFetching() async {
     if (_operation != null && !_operation!.isCanceled) {

@@ -4,7 +4,8 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:logger/logger.dart';
 
 class DataSaverImg extends StatefulWidget {
-  const DataSaverImg({super.key, required this.imageUrl});
+  const DataSaverImg({super.key, required this.imageUrl, this.size = 130});
+  final double size;
   final String imageUrl;
 
   @override
@@ -47,54 +48,46 @@ class _DataSaverImgState extends State<DataSaverImg>
   Widget build(BuildContext context) {
     super.build(context);
 
-    return Column(
-      children: [
-        (widget.imageUrl == "")
-            ? SizedBox(
-                height: 130,
-                width: 130,
-                child: Image.asset("assets/misc/picture-icon.png"))
-            : (!isClicked && !isImageCached)
-                ? InkWell(
-                    onTap: () {
-                      if (mounted) {
-                        setState(() {
-                          isClicked = true;
-                        });
-                      }
-                    },
-                    child: SizedBox(
-                        height: 130,
-                        width: 130,
-                        child: const Center(child: Text("Click to load"))),
-                  )
-                : CachedNetworkImage(
-                    imageUrl: widget.imageUrl,
-                    imageBuilder: (context, imageProvider) => Container(
-                      width: 130,
-                      height: 130,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        image: DecorationImage(
-                            image: imageProvider, fit: BoxFit.cover),
-                      ),
-                    ),
-                    width: 130,
-                    height: 130,
-                    progressIndicatorBuilder:
-                        (context, url, downloadProgress) =>
-                            CircularProgressIndicator(
-                      value: downloadProgress.progress,
-                    ),
-                    errorWidget: (context, url, error) {
-                      Logger().e("Caching ERROR: $error");
-                      return Image.asset("assets/misc/error.png");
-                    },
+    return (widget.imageUrl == "")
+        ? SizedBox(
+            height: widget.size,
+            width: widget.size,
+            child: Image.asset("assets/misc/picture-icon.png"))
+        : (!isClicked && !isImageCached)
+            ? InkWell(
+                onTap: () {
+                  if (mounted) {
+                    setState(() {
+                      isClicked = true;
+                    });
+                  }
+                },
+                child: SizedBox(
+                    height: widget.size,
+                    width: widget.size,
+                    child: const Center(child: Text("Click to load"))),
+              )
+            : CachedNetworkImage(
+                imageUrl: widget.imageUrl,
+                imageBuilder: (context, imageProvider) => Container(
+                  width: widget.size,
+                  height: widget.size,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    image: DecorationImage(
+                        image: imageProvider, fit: BoxFit.cover),
                   ),
-        const SizedBox(
-          height: 20,
-        ),
-      ],
-    );
+                ),
+                width: widget.size,
+                height: widget.size,
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    CircularProgressIndicator(
+                  value: downloadProgress.progress,
+                ),
+                errorWidget: (context, url, error) {
+                  Logger().e("Caching ERROR: $error");
+                  return Image.asset("assets/misc/error.png");
+                },
+              );
   }
 }

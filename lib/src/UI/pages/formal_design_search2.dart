@@ -44,41 +44,45 @@ class FormalBubblesSearchPage2 extends StatelessWidget {
               fit: BoxFit.fill,
             ),
           ),
-          SafeArea(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(RECT_BORDER_RADIUS),
-              ),
-              margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-              // margin: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 0),
-              child: ListView(children: [
-                ClipRRect(
+          GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: SafeArea(
+              child: Container(
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(RECT_BORDER_RADIUS),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(
-                        sigmaX: filterVals[designIndex],
-                        sigmaY: filterVals[designIndex],
-                        tileMode: TileMode.decal),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 20),
-                      // child: SearchFieldExpanded2(
-                      //   color: cardColors[designIndex],
-                      // ),
-                      child: SearchWidget(),
+                ),
+                margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                // margin: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 0),
+                child: ListView(children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(RECT_BORDER_RADIUS),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(
+                          sigmaX: filterVals[designIndex],
+                          sigmaY: filterVals[designIndex],
+                          tileMode: TileMode.decal),
+                      child: Padding(
+                        padding:
+                            const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 20),
+                        // child: SearchFieldExpanded2(
+                        //   color: cardColors[designIndex],
+                        // ),
+                        child: SearchWidget(),
+                      ),
                     ),
                   ),
-                ),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(RECT_BORDER_RADIUS),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(
-                        sigmaX: filterVals[designIndex],
-                        sigmaY: filterVals[designIndex],
-                        tileMode: TileMode.decal),
-                    child: ResultListV2(color: cardColors[designIndex]),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(RECT_BORDER_RADIUS),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(
+                          sigmaX: filterVals[designIndex],
+                          sigmaY: filterVals[designIndex],
+                          tileMode: TileMode.decal),
+                      child: ResultListV2(color: cardColors[designIndex]),
+                    ),
                   ),
-                ),
-              ]),
+                ]),
+              ),
             ),
           ),
 

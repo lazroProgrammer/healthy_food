@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 
 class CachedImg extends StatelessWidget {
-  const CachedImg({super.key, required this.imageUrl});
+  const CachedImg({super.key, required this.imageUrl, this.size = 130});
+  final double size;
   final String imageUrl;
   final bool dark = true;
   @override
@@ -12,8 +13,8 @@ class CachedImg extends StatelessWidget {
       children: [
         (imageUrl != "")
             ? Container(
-                width: 130,
-                height: 130,
+                width: size,
+                height: size,
                 decoration: BoxDecoration(
                     color: (dark) ? Colors.teal[200] : Colors.teal[100],
                     borderRadius: BorderRadius.circular(20)),
@@ -27,8 +28,8 @@ class CachedImg extends StatelessWidget {
                           image: imageProvider, fit: BoxFit.cover),
                     ),
                   ),
-                  width: 130,
-                  height: 130,
+                  width: size,
+                  height: size,
                   progressIndicatorBuilder: (context, url, downloadProgress) =>
                       CircularProgressIndicator(
                           value: downloadProgress.progress),
@@ -41,12 +42,12 @@ class CachedImg extends StatelessWidget {
                 ),
               )
             : SizedBox(
-                height: 130,
-                width: 130,
+                height: size,
+                width: size,
                 child: Image.asset("assets/misc/picture-icon.png")),
-        const SizedBox(
-          height: 20,
-        ),
+        // const SizedBox(
+        //   height: 20,
+        // ),
       ],
     );
   }
